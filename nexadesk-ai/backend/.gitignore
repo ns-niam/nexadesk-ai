@@ -1,0 +1,18 @@
+# Virtual Environment
+backend/venv/
+
+# Environment Variables
+backend/.env
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# OS Files
+.DS_Store
