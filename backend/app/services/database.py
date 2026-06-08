@@ -60,3 +60,51 @@ def get_chat_history(
     )
 
     return cursor.fetchall()
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS faq (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    question TEXT UNIQUE,
+    answer TEXT
+)
+""")
+
+conn.commit()
+
+def add_faq(
+    question: str,
+    answer: str
+):
+
+    cursor.execute(
+        """
+        INSERT OR IGNORE INTO faq
+        (question, answer)
+        VALUES (?, ?)
+        """,
+        (question, answer)
+    )
+
+    conn.commit()
+
+
+def search_faq(
+    keyword: str
+):
+
+    cursor.execute(
+        """
+        SELECT answer
+        FROM faq
+        WHERE question LIKE ?
+        LIMIT 1
+        """,
+        (f"%{keyword}%",)
+    )
+
+    result = cursor.fetchone()
+
+    if result:
+        return result[0]
+
+    return None

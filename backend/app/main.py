@@ -7,7 +7,9 @@ from app.services.intent_classifier import (
     classify_intent,
     extract_customer_data
 )
-
+from app.services.knowledge_base import (
+    load_default_faqs
+)
 from app.services.memory import chat_history
 from app.services.customer_profile import customer_profile
 from app.services.ticket_manager import create_ticket
@@ -17,16 +19,17 @@ from app.models.chat import (
 )
 from app.services.database import (
     save_message,
-    get_chat_history
+    get_chat_history,
+    search_faq
 )
-
+from app.services.database import search_faq
 
 
 app = FastAPI(
     title="NexaDesk AI",
     version="1.0.0"
 )
-
+load_default_faqs()
 
 @app.get("/")
 def root():
@@ -176,13 +179,31 @@ def chat(request: ChatRequest):
 
     extract_customer_data(message)
 
-    intent = classify_intent(message)
-
     save_message(
         session_id,
         "user",
         message
     )
+
+    # FAQ Retrieval
+    faq_answer = search_faq(message)
+
+    if faq_answer:
+
+        save_message(
+            session_id,
+            "assistant",
+            faq_answer
+        )
+
+        return ChatResponse(
+            session_id=session_id,
+            intent="faq_response",
+            response=faq_answer
+        )
+
+    # Intent Classification
+    intent = classify_intent(message)
 
     if intent == "account_opening":
 
@@ -202,6 +223,48 @@ def chat(request: ChatRequest):
 
         response = (
             "Please provide your monthly income range."
+        )
+
+    elif intent == "debit_card_support":
+
+        response = (
+            "Please provide your account number "
+            "to request a new debit card."
+        )
+
+    elif intent == "card_security":
+
+        response = (
+            "Your card security request has been "
+            "prioritized. Please block your card "
+            "immediately and contact support."
+        )
+
+    elif intent == "balance_inquiry":
+
+        response = (
+            "For security reasons, balance inquiries "
+            "require customer authentication."
+        )
+
+    elif intent == "money_transfer":
+
+        response = (
+            "Please provide transfer details "
+            "including recipient account information."
+        )
+
+    elif intent == "branch_information":
+
+        response = (
+            "Please provide your city "
+            "to find the nearest branch."
+        )
+
+    elif intent == "online_banking_support":
+
+        response = (
+            "Please describe your online banking issue."
         )
 
     elif intent == "human_handoff":
@@ -228,7 +291,6 @@ def chat(request: ChatRequest):
         intent=intent,
         response=response
     )
-
 
 
 @app.get("/db-history")
