@@ -19,3 +19,23 @@ def classify_intent(message: str):
 
     else:
         return "general_query"
+
+
+from app.services.customer_profile import customer_profile
+
+
+def extract_customer_data(message: str):
+
+    words = message.split()
+
+    if "my name is" in message.lower():
+
+        customer_profile["name"] = words[-1]
+
+    if "loan" in message.lower():
+
+        customer_profile["loan_interest"] = True
+
+    if "credit card" in message.lower():
+
+        customer_profile["credit_card_interest"] = True

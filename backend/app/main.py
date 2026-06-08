@@ -3,6 +3,13 @@ from app.services.config import GEMINI_API_KEY
 from app.services.gemini_service import ask_gemini
 from app.services.intent_classifier import classify_intent
 from app.services.memory import chat_history
+from app.services.customer_profile import customer_profile
+
+from app.services.intent_classifier import (
+    classify_intent,
+    extract_customer_data
+)
+
 
 
 app = FastAPI(
@@ -24,7 +31,7 @@ def config_check():
 
 @app.get("/ask")
 def ask(message: str):
-
+    extract_customer_data(message)
     chat_history.append({
         "user": message
     })
@@ -73,3 +80,8 @@ def history():
     return {
         "history": chat_history
     }
+
+@app.get("/profile")
+def profile():
+
+    return customer_profile
