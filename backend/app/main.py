@@ -1,5 +1,5 @@
 from fastapi import FastAPI  # type: ignore[import]
-
+from app.services.session_manager import create_session
 from app.services.config import GEMINI_API_KEY
 from app.services.gemini_service import ask_gemini
 
@@ -15,6 +15,11 @@ from app.models.chat import (
     ChatRequest,
     ChatResponse
 )
+from app.services.database import (
+    save_message,
+    get_chat_history
+)
+
 
 
 app = FastAPI(
@@ -152,18 +157,32 @@ def profile():
     return customer_profile
 
 
+@app.get("/new-session")
+def new_session():
+
+    session_id = create_session()
+
+    return {
+        "session_id": session_id
+    }
+
+
+
 @app.post("/chat")
 def chat(request: ChatRequest):
 
+    session_id = request.session_id
     message = request.message
 
     extract_customer_data(message)
 
-    chat_history.append({
-        "user": message
-    })
-
     intent = classify_intent(message)
+
+    save_message(
+        session_id,
+        "user",
+        message
+    )
 
     if intent == "account_opening":
 
@@ -198,11 +217,25 @@ def chat(request: ChatRequest):
 
         response = ask_gemini(message)
 
-    chat_history.append({
-        "assistant": response
-    })
+    save_message(
+        session_id,
+        "assistant",
+        response
+    )
 
     return ChatResponse(
+        session_id=session_id,
         intent=intent,
         response=response
     )
+
+
+
+@app.get("/db-history")
+def db_history(
+    session_id: str
+):
+
+    return {
+        "history": get_chat_history(session_id)
+    }
