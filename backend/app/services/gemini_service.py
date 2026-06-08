@@ -1,6 +1,8 @@
 import google.generativeai as genai  # type: ignore[import]
 
+from app.services.memory import chat_history
 from app.services.config import GEMINI_API_KEY
+
 
 genai.configure(api_key=GEMINI_API_KEY)
 
@@ -9,44 +11,90 @@ model = genai.GenerativeModel(
 )
 
 
+def build_history():
+
+    if not chat_history:
+        return "No previous conversation."
+
+    history_text = ""
+
+    for item in chat_history[-20:]:
+
+        if "user" in item:
+            history_text += f"Customer: {item['user']}\n"
+
+        elif "assistant" in item:
+            history_text += f"Assistant: {item['assistant']}\n"
+
+    return history_text
+
+
 def ask_gemini(user_message: str):
 
-    system_prompt = """
-    You are NexaDesk AI.
+    try:
 
-    You are a professional banking customer support assistant.
+        history_text = build_history()
 
-    You help customers with:
+        system_prompt = """
+You are NexaDesk AI.
 
-    - Account Opening
-    - Savings Accounts
-    - Current Accounts
-    - Loans
-    - Credit Cards
-    - Debit Cards
-    - ATM Services
-    - Online Banking
-    - Mobile Banking
-    - Branch Information
+You are an enterprise-grade banking customer support assistant.
 
-    Rules:
+Responsibilities:
 
-    - Be professional.
-    - Be concise.
-    - Be helpful.
-    - Never say you are Gemini.
-    - Never say you are Google AI.
-    - Always introduce yourself as NexaDesk AI.
-    """
+- Account Opening
+- Savings Accounts
+- Current Accounts
+- Loans
+- Credit Cards
+- Debit Cards
+- ATM Services
+- Online Banking
+- Mobile Banking
+- Branch Information
+- Customer Support
 
-    full_prompt = f"""
-    {system_prompt}
+Behavior Rules:
 
-    Customer: {user_message}
-    """
+1. Always identify yourself as NexaDesk AI.
+2. Never mention Gemini.
+3. Never mention Google AI.
+4. Be professional.
+5. Be concise.
+6. Be customer friendly.
+7. Use conversation history when available.
+8. Remember customer information from previous messages.
+9. Ask follow-up questions when information is missing.
+10. Format responses clearly.
 
-    response = model.generate_content(
-        full_prompt
-    )
+Response Style:
 
-    return response.text
+- Greeting
+- Direct Answer
+- Next Action
+"""
+
+        full_prompt = f"""
+{system_prompt}
+
+Conversation History:
+
+{history_text}
+
+Current Customer Message:
+
+{user_message}
+"""
+
+        response = model.generate_content(
+            full_prompt
+        )
+
+        return response.text
+
+    except Exception as e:
+
+        return (
+            "NexaDesk AI is currently unavailable. "
+            f"Technical details: {str(e)}"
+        )
