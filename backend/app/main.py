@@ -11,6 +11,10 @@ from app.services.intent_classifier import (
 from app.services.memory import chat_history
 from app.services.customer_profile import customer_profile
 from app.services.ticket_manager import create_ticket
+from app.models.chat import (
+    ChatRequest,
+    ChatResponse
+)
 
 
 app = FastAPI(
@@ -146,3 +150,59 @@ def history():
 def profile():
 
     return customer_profile
+
+
+@app.post("/chat")
+def chat(request: ChatRequest):
+
+    message = request.message
+
+    extract_customer_data(message)
+
+    chat_history.append({
+        "user": message
+    })
+
+    intent = classify_intent(message)
+
+    if intent == "account_opening":
+
+        response = (
+            "To open a bank account, please provide "
+            "your ID, phone number and proof of address."
+        )
+
+    elif intent == "loan_inquiry":
+
+        response = (
+            "Please specify whether you need a personal, "
+            "home, education, business, or auto loan."
+        )
+
+    elif intent == "credit_card_support":
+
+        response = (
+            "Please provide your monthly income range."
+        )
+
+    elif intent == "human_handoff":
+
+        ticket_id = create_ticket()
+
+        response = (
+            f"Human agent requested. "
+            f"Ticket ID: {ticket_id}"
+        )
+
+    else:
+
+        response = ask_gemini(message)
+
+    chat_history.append({
+        "assistant": response
+    })
+
+    return ChatResponse(
+        intent=intent,
+        response=response
+    )
