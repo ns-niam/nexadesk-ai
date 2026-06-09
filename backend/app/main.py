@@ -394,3 +394,85 @@ def tickets():
     return {
         "tickets": cursor.fetchall()
     }
+
+# admin analytics
+
+@app.get("/admin/analytics")
+def admin_analytics():
+
+    return {
+        "total_messages": get_total_messages(),
+        "total_customers": get_total_customers(),
+        "total_tickets": get_total_tickets(),
+        "system_status": "healthy"
+    }
+
+
+# admin customers
+
+@app.get("/admin/customers")
+def admin_customers():
+
+    from app.services.database import cursor
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM customers
+        ORDER BY id DESC
+        """
+    )
+
+    return {
+        "customers": cursor.fetchall()
+    }
+
+
+# admin tickets
+
+@app.get("/admin/tickets")
+def admin_tickets():
+
+    from app.services.database import cursor
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM tickets
+        ORDER BY id DESC
+        """
+    )
+
+    return {
+        "tickets": cursor.fetchall()
+    }
+
+
+# ticket status
+
+@app.put("/admin/ticket-status")
+def update_ticket_status(
+    ticket_id: str,
+    status: str
+):
+
+    from app.services.database import cursor, conn
+
+    cursor.execute(
+        """
+        UPDATE tickets
+        SET status = ?
+        WHERE ticket_id = ?
+        """,
+        (
+            status,
+            ticket_id
+        )
+    )
+
+    conn.commit()
+
+    return {
+        "ticket_id": ticket_id,
+        "status": status
+    }
