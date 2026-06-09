@@ -98,3 +98,5 @@ Current Customer Message:
             "NexaDesk AI is currently unavailable. "
             f"Technical details: {str(e)}"
         )
+    
+
