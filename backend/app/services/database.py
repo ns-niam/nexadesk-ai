@@ -141,6 +141,20 @@ def save_customer(
 
     cursor.execute(
         """
+        SELECT id
+        FROM customers
+        WHERE name = ?
+        """,
+        (name,)
+    )
+
+    existing = cursor.fetchone()
+
+    if existing:
+        return
+
+    cursor.execute(
+        """
         INSERT INTO customers
         (
             name,
@@ -157,7 +171,6 @@ def save_customer(
     )
 
     conn.commit()
-
 
 def save_ticket(
     ticket_id: str,

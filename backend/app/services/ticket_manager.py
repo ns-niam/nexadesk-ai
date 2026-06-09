@@ -1,10 +1,6 @@
-ticket_counter = 1000
+import uuid
 
 
 def create_ticket():
 
-    global ticket_counter
-
-    ticket_counter += 1
-
-    return f"NXD-{ticket_counter}"
+    return f"NXD-{str(uuid.uuid4())[:8]}"
