@@ -1,4 +1,4 @@
-# NexaDesk AI 🏦
+# NexaDesk AI 
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green)
@@ -330,43 +330,60 @@ nexadesk-ai/
 | Sentiment Analysis        | 🔄 Planned |
 | Fraud Detection Assistant | 🔄 Planned |
 
-```
-
 # Future Roadmap
 
-## Phase 2
+## Phase 2 – Enterprise Support Features
 
-* Customer Database Tables
-* Ticket Database Tables
-* Analytics API
-* Admin Dashboard
+* Customer Analytics API
+* Ticket Analytics API
+* Admin Dashboard Backend
+* Agent Performance Tracking
+* Customer Interaction Metrics
+* Advanced Reporting System
 
 ---
 
-## Phase 3
+## Phase 3 – AI Knowledge Layer
 
 * Banking Knowledge Base Expansion
-* RAG Pipeline
+* Retrieval-Augmented Generation (RAG)
 * Semantic Search
-* Vector Database
+* Vector Database Integration
+* Document Processing Pipeline
+* Banking Policy Knowledge Engine
 
 ---
 
-## Phase 4
+## Phase 4 – Security & Authentication
 
-* Authentication
-* Role-Based Access Control
-* Agent Dashboard
-* Multi-Agent Architecture
+* User Authentication
+* JWT Authorization
+* Role-Based Access Control (RBAC)
+* Customer Authentication Flows
+* Secure Session Management
+* Audit Logging
 
 ---
 
-## Phase 5
+## Phase 5 – Advanced AI Features
 
 * ML-Based Intent Classification
-* Fine-Tuned Banking Model
+* Fine-Tuned Banking Support Model
 * Customer Sentiment Analysis
-* Fraud Detection Assistance
+* Fraud Detection Assistant
+* Personalized Recommendations
+* AI Escalation Decision Engine
+
+---
+
+## Phase 6 – Production Deployment
+
+* Docker Containerization
+* CI/CD Pipeline
+* Cloud Deployment
+* Monitoring & Logging
+* Automated Testing
+* Production Database Migration
 
 ---
 
@@ -375,7 +392,7 @@ nexadesk-ai/
 ```bash
 git clone https://github.com/ns-niam/nexadesk-ai.git
 
-cd nexadesk-ai
+cd nexadesk-ai/backend
 
 python -m venv venv
 
@@ -385,6 +402,33 @@ pip install -r requirements.txt
 
 uvicorn app.main:app --reload
 ```
+
+---
+
+# Upcoming Milestones
+
+### Day 17
+
+* Analytics API
+* Customer Statistics
+* Ticket Statistics
+
+### Day 18
+
+* Admin Dashboard Backend
+
+### Day 19–20
+
+* Banking Knowledge Base Expansion
+
+### Day 21+
+
+* RAG Architecture
+* Vector Search
+* Enterprise AI Features
+
+```
+
 # Why This Project?
 
 NexaDesk AI was built to simulate a real-world AI-powered banking customer support system.
