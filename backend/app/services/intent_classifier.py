@@ -153,14 +153,31 @@ def extract_customer_data(message: str):
 
     message_lower = message.lower()
 
-    words = message.split()
+    # name extraction
 
-    if "my name is" in message_lower and len(words) >= 4:
-        customer_profile["name"] = words[-1]
+    if "my name is" in message_lower:
+
+        try:
+
+            start = message_lower.find("my name is")
+
+            name_text = message[start + len("my name is"):].strip()
+
+            name = name_text.split()[0]
+
+            customer_profile["name"] = name.capitalize()
+
+        except Exception:
+            pass
+
+    # loan interest
 
     if "loan" in message_lower:
+
         customer_profile["loan_interest"] = True
 
-    if "credit card" in message_lower:
-        customer_profile["credit_card_interest"] = True    
+    # credit card interest
 
+    if "credit card" in message_lower:
+
+        customer_profile["credit_card_interest"] = True

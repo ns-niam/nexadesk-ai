@@ -1,4 +1,7 @@
-from fastapi import FastAPI  # type: ignore[import]
+from fastapi import FastAPI
+
+# imports
+
 from app.services.session_manager import create_session
 from app.services.config import GEMINI_API_KEY
 from app.services.gemini_service import ask_gemini
@@ -7,29 +10,38 @@ from app.services.intent_classifier import (
     classify_intent,
     extract_customer_data
 )
+
 from app.services.knowledge_base import (
     load_default_faqs
 )
+
 from app.services.memory import chat_history
 from app.services.customer_profile import customer_profile
 from app.services.ticket_manager import create_ticket
+
 from app.models.chat import (
     ChatRequest,
     ChatResponse
 )
+
 from app.services.database import (
     save_message,
     get_chat_history,
-    search_faq
+    search_faq,
+    save_ticket,
+    save_customer
 )
-from app.services.database import search_faq
 
+# app config
 
 app = FastAPI(
     title="NexaDesk AI",
     version="1.0.0"
 )
+
 load_default_faqs()
+
+# basic endpoints
 
 @app.get("/")
 def root():
@@ -47,6 +59,8 @@ def config_check():
         "gemini_loaded": GEMINI_API_KEY is not None
     }
 
+
+# legacy chat endpoint
 
 @app.get("/ask")
 def ask(message: str):
@@ -146,19 +160,7 @@ def ask(message: str):
     }
 
 
-@app.get("/history")
-def history():
-
-    return {
-        "history": chat_history
-    }
-
-
-@app.get("/profile")
-def profile():
-
-    return customer_profile
-
+# session management
 
 @app.get("/new-session")
 def new_session():
@@ -170,6 +172,7 @@ def new_session():
     }
 
 
+# production chat endpoint
 
 @app.post("/chat")
 def chat(request: ChatRequest):
@@ -179,13 +182,24 @@ def chat(request: ChatRequest):
 
     extract_customer_data(message)
 
+    # customer persistence
+
+    if customer_profile["name"]:
+
+        save_customer(
+            customer_profile["name"],
+            customer_profile["loan_interest"],
+            customer_profile["credit_card_interest"]
+        )
+
     save_message(
         session_id,
         "user",
         message
     )
 
-    # FAQ Retrieval
+    # faq retrieval
+
     faq_answer = search_faq(message)
 
     if faq_answer:
@@ -202,7 +216,8 @@ def chat(request: ChatRequest):
             response=faq_answer
         )
 
-    # Intent Classification
+    # intent classification
+
     intent = classify_intent(message)
 
     if intent == "account_opening":
@@ -271,6 +286,12 @@ def chat(request: ChatRequest):
 
         ticket_id = create_ticket()
 
+        save_ticket(
+            ticket_id,
+            session_id,
+            "human_handoff"
+        )
+
         response = (
             f"Human agent requested. "
             f"Ticket ID: {ticket_id}"
@@ -293,11 +314,29 @@ def chat(request: ChatRequest):
     )
 
 
+# database history
+
 @app.get("/db-history")
-def db_history(
-    session_id: str
-):
+def db_history(session_id: str):
 
     return {
         "history": get_chat_history(session_id)
+    }
+
+
+# profile
+
+@app.get("/profile")
+def profile():
+
+    return customer_profile
+
+
+# memory history
+
+@app.get("/history")
+def history():
+
+    return {
+        "history": chat_history
     }

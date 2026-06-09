@@ -108,3 +108,80 @@ def search_faq(
         return result[0]
 
     return None
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS customers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    loan_interest INTEGER DEFAULT 0,
+    credit_card_interest INTEGER DEFAULT 0
+)
+""")
+
+conn.commit()
+
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS tickets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ticket_id TEXT,
+    session_id TEXT,
+    issue_type TEXT,
+    status TEXT
+)
+""")
+
+conn.commit()
+
+def save_customer(
+    name: str,
+    loan_interest: bool,
+    credit_card_interest: bool
+):
+
+    cursor.execute(
+        """
+        INSERT INTO customers
+        (
+            name,
+            loan_interest,
+            credit_card_interest
+        )
+        VALUES (?, ?, ?)
+        """,
+        (
+            name,
+            int(loan_interest),
+            int(credit_card_interest)
+        )
+    )
+
+    conn.commit()
+
+
+def save_ticket(
+    ticket_id: str,
+    session_id: str,
+    issue_type: str
+):
+
+    cursor.execute(
+        """
+        INSERT INTO tickets
+        (
+            ticket_id,
+            session_id,
+            issue_type,
+            status
+        )
+        VALUES (?, ?, ?, ?)
+        """,
+        (
+            ticket_id,
+            session_id,
+            issue_type,
+            "OPEN"
+        )
+    )
+
+    conn.commit()
