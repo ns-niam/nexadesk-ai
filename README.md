@@ -427,8 +427,6 @@ uvicorn app.main:app --reload
 * Vector Search
 * Enterprise AI Features
 
-```
-
 # Why This Project?
 
 NexaDesk AI was built to simulate a real-world AI-powered banking customer support system.
@@ -451,7 +449,7 @@ This project serves as a foundation for building enterprise-grade AI agents for 
 
 **Md Sha Niamatullah**
 
-Ai Engineering Student
+AI Engineering Student
 
 Building AI Products, Intelligent Systems, and Future Technology Ventures.
 
@@ -459,5 +457,5 @@ Building AI Products, Intelligent Systems, and Future Technology Ventures.
 
 # Project Status
 
- Active Development
+🚀 Active Development
 
