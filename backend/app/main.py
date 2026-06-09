@@ -39,7 +39,13 @@ from app.services.database import (
     get_total_tickets,
     get_intent_analytics
 )
+from app.services.rag_service import (
+    get_rag_context
+)
 
+from app.services.gemini_service import (
+    ask_gemini_with_context
+)
 
 
 
@@ -163,7 +169,14 @@ def ask(message: str):
 
     else:
 
-        response = ask_gemini(message)
+        context = get_rag_context(
+             message
+          )
+
+        response = ask_gemini_with_context(
+        message,
+        context
+        )
 
     chat_history.append({
         "assistant": response
@@ -245,16 +258,25 @@ def chat(request: ChatRequest):
 
     elif intent == "loan_inquiry":
 
-        response = (
-            "Please specify whether you need a personal, "
-            "home, education, business, or auto loan."
-        )
+         context = get_rag_context(
+         message
+    )
+
+         response = ask_gemini_with_context(
+         message,
+         context
+    )
 
     elif intent == "credit_card_support":
 
-        response = (
-            "Please provide your monthly income range."
-        )
+         context = get_rag_context(
+         message
+    )
+
+         response = ask_gemini_with_context(
+         message,
+         context
+    )
 
     elif intent == "debit_card_support":
 
@@ -315,7 +337,14 @@ def chat(request: ChatRequest):
 
     else:
 
-        response = ask_gemini(message)
+         context = get_rag_context(
+         message
+        )
+
+         response = ask_gemini_with_context(
+         message,
+         context
+    )
 
     save_message(
         session_id,
@@ -526,4 +555,21 @@ def top_intents():
 
     return {
         "intents": get_intent_analytics()
+    }
+
+
+# rag testing
+
+@app.get("/rag-test")
+def rag_test(
+    question: str
+):
+
+    context = get_rag_context(
+        question
+    )
+
+    return {
+        "question": question,
+        "retrieved_context": context
     }

@@ -1,27 +1,27 @@
+import os
+
+
 def load_documents():
 
-    documents = [
-        """
-        Personal Loan
+    documents = []
 
-        Customers can apply for personal loans.
-        Loan approval depends on eligibility.
-        Maximum loan amount is $50,000.
-        """,
+    docs_path = "docs"
 
-        """
-        Credit Card
+    for filename in os.listdir(docs_path):
 
-        Customers can apply for credit cards.
-        Income verification is required.
-        """,
+        if filename.endswith(".txt"):
 
-        """
-        Savings Account
+            with open(
+                os.path.join(
+                    docs_path,
+                    filename
+                ),
+                "r",
+                encoding="utf-8"
+            ) as f:
 
-        Savings accounts allow secure deposits.
-        Minimum balance requirements may apply.
-        """
-    ]
+                documents.append(
+                    f.read()
+                )
 
     return documents

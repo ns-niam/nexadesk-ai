@@ -100,3 +100,27 @@ Current Customer Message:
         )
     
 
+def ask_gemini_with_context(
+    user_message: str,
+    context: str
+):
+
+    prompt = f"""
+    You are NexaDesk AI.
+
+    Banking Knowledge:
+
+    {context}
+
+    Customer Question:
+
+    {user_message}
+
+    Answer using the banking knowledge above.
+    """
+
+    response = model.generate_content(
+        prompt
+    )
+
+    return response.text

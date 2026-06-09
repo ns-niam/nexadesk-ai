@@ -1,0 +1,7 @@
+Personal Loan
+
+Customers can apply for personal loans.
+
+Loan approval depends on eligibility.
+
+Maximum loan amount is $50,000.

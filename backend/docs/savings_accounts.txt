@@ -1,0 +1,7 @@
+Savings Accounts
+
+Savings accounts allow secure deposits.
+
+Interest may be earned on balances.
+
+Minimum balance requirements may apply.
