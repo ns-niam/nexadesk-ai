@@ -1,5 +1,7 @@
 import sqlite3
 
+
+
 conn = sqlite3.connect(
     "nexadesk.db",
     check_same_thread=False
@@ -148,27 +150,43 @@ def save_customer(
         (name,)
     )
 
-    existing = cursor.fetchone()
+    existing_customer = cursor.fetchone()
 
-    if existing:
-        return
+    if existing_customer:
 
-    cursor.execute(
-        """
-        INSERT INTO customers
-        (
-            name,
-            loan_interest,
-            credit_card_interest
+        cursor.execute(
+            """
+            UPDATE customers
+            SET
+                loan_interest = ?,
+                credit_card_interest = ?
+            WHERE name = ?
+            """,
+            (
+                int(loan_interest),
+                int(credit_card_interest),
+                name
+            )
         )
-        VALUES (?, ?, ?)
-        """,
-        (
-            name,
-            int(loan_interest),
-            int(credit_card_interest)
+
+    else:
+
+        cursor.execute(
+            """
+            INSERT INTO customers
+            (
+                name,
+                loan_interest,
+                credit_card_interest
+            )
+            VALUES (?, ?, ?)
+            """,
+            (
+                name,
+                int(loan_interest),
+                int(credit_card_interest)
+            )
         )
-    )
 
     conn.commit()
 
@@ -230,6 +248,46 @@ def get_total_tickets():
         """
         SELECT COUNT(*)
         FROM tickets
+        """
+    )
+
+    return cursor.fetchone()[0]
+
+
+def search_customer(name: str):
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM customers
+        WHERE name LIKE ?
+        """,
+        (f"%{name}%",)
+    )
+
+    return cursor.fetchall()
+
+
+def get_loan_customers():
+
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM customers
+        WHERE loan_interest = 1
+        """
+    )
+
+    return cursor.fetchone()[0]
+
+
+def get_credit_card_customers():
+
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM customers
+        WHERE credit_card_interest = 1
         """
     )
 

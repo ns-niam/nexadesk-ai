@@ -1,11 +1,8 @@
 from fastapi import FastAPI
-
-# imports
-
+from app.services.database import search_customer
 from app.services.session_manager import create_session
 from app.services.config import GEMINI_API_KEY
 from app.services.gemini_service import ask_gemini
-
 from app.services.intent_classifier import (
     classify_intent,
     extract_customer_data
@@ -14,14 +11,17 @@ from app.services.intent_classifier import (
 from app.services.knowledge_base import (
     load_default_faqs
 )
-
 from app.services.memory import chat_history
 from app.services.customer_profile import customer_profile
 from app.services.ticket_manager import create_ticket
-
 from app.models.chat import (
     ChatRequest,
     ChatResponse
+)
+
+from app.services.database import (
+    get_loan_customers,
+    get_credit_card_customers
 )
 
 from app.services.database import (
@@ -404,6 +404,8 @@ def admin_analytics():
         "total_messages": get_total_messages(),
         "total_customers": get_total_customers(),
         "total_tickets": get_total_tickets(),
+        "loan_customers": get_loan_customers(),
+        "credit_card_customers": get_credit_card_customers(),
         "system_status": "healthy"
     }
 
@@ -475,4 +477,33 @@ def update_ticket_status(
     return {
         "ticket_id": ticket_id,
         "status": status
+    }
+
+# customer search
+
+@app.get("/admin/search-customer")
+def admin_search_customer(name: str):
+
+    results = search_customer(name)
+
+    return {
+        "customers": results
+    }
+
+
+# customer details
+
+@app.get("/admin/customer")
+def admin_customer(name: str):
+
+    results = search_customer(name)
+
+    if not results:
+
+        return {
+            "message": "Customer not found"
+        }
+
+    return {
+        "customer": results
     }
