@@ -292,3 +292,43 @@ def get_credit_card_customers():
     )
 
     return cursor.fetchone()[0]
+
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS intent_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    intent TEXT
+)
+""")
+
+conn.commit()
+
+
+
+def save_intent(intent: str):
+
+    cursor.execute(
+        """
+        INSERT INTO intent_logs
+        (intent)
+        VALUES (?)
+        """,
+        (intent,)
+    )
+
+    conn.commit()
+
+
+
+def get_intent_analytics():
+
+    cursor.execute(
+        """
+        SELECT intent, COUNT(*)
+        FROM intent_logs
+        GROUP BY intent
+        ORDER BY COUNT(*) DESC
+        """
+    )
+
+    return cursor.fetchall()

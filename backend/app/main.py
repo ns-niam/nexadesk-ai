@@ -29,14 +29,21 @@ from app.services.database import (
     get_chat_history,
     search_faq,
     save_ticket,
+    save_intent,
     save_customer
 )
 
 from app.services.database import (
     get_total_messages,
     get_total_customers,
-    get_total_tickets
+    get_total_tickets,
+    get_intent_analytics
 )
+
+
+
+
+
 
 
 # app config
@@ -79,6 +86,7 @@ def ask(message: str):
     })
 
     intent = classify_intent(message)
+    save_intent(intent)
 
     if intent == "account_opening":
 
@@ -226,6 +234,7 @@ def chat(request: ChatRequest):
     # intent classification
 
     intent = classify_intent(message)
+    save_intent(intent)
 
     if intent == "account_opening":
 
@@ -401,13 +410,14 @@ def tickets():
 def admin_analytics():
 
     return {
-        "total_messages": get_total_messages(),
-        "total_customers": get_total_customers(),
-        "total_tickets": get_total_tickets(),
-        "loan_customers": get_loan_customers(),
-        "credit_card_customers": get_credit_card_customers(),
-        "system_status": "healthy"
-    }
+    "total_messages": get_total_messages(),
+    "total_customers": get_total_customers(),
+    "total_tickets": get_total_tickets(),
+    "loan_customers": get_loan_customers(),
+    "credit_card_customers": get_credit_card_customers(),
+    "top_intents": get_intent_analytics(),
+    "system_status": "healthy"
+}
 
 
 # admin customers
@@ -506,4 +516,14 @@ def admin_customer(name: str):
 
     return {
         "customer": results
+    }
+
+
+# top intents
+
+@app.get("/admin/top-intents")
+def top_intents():
+
+    return {
+        "intents": get_intent_analytics()
     }
