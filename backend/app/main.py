@@ -32,6 +32,13 @@ from app.services.database import (
     save_customer
 )
 
+from app.services.database import (
+    get_total_messages,
+    get_total_customers,
+    get_total_tickets
+)
+
+
 # app config
 
 app = FastAPI(
@@ -339,4 +346,51 @@ def history():
 
     return {
         "history": chat_history
+    }
+
+# analytics
+
+@app.get("/analytics")
+def analytics():
+
+    return {
+        "total_messages": get_total_messages(),
+        "total_customers": get_total_customers(),
+        "total_tickets": get_total_tickets()
+    }
+
+# customers
+
+@app.get("/customers")
+def customers():
+
+    from app.services.database import cursor
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM customers
+        """
+    )
+
+    return {
+        "customers": cursor.fetchall()
+    }
+
+# tickets
+
+@app.get("/tickets")
+def tickets():
+
+    from app.services.database import cursor
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM tickets
+        """
+    )
+
+    return {
+        "tickets": cursor.fetchall()
     }

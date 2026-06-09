@@ -185,3 +185,39 @@ def save_ticket(
     )
 
     conn.commit()
+
+
+def get_total_messages():
+
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM chat_history
+        """
+    )
+
+    return cursor.fetchone()[0]
+
+
+def get_total_customers():
+
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM customers
+        """
+    )
+
+    return cursor.fetchone()[0]
+
+
+def get_total_tickets():
+
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM tickets
+        """
+    )
+
+    return cursor.fetchone()[0]
