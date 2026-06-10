@@ -436,13 +436,32 @@ def get_dashboard_stats():
     )
     closed_tickets = cursor.fetchone()[0]
 
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM tickets
+        WHERE status = 'IN_PROGRESS'
+        """
+    )
+    in_progress_tickets = cursor.fetchone()[0]
+
+    cursor.execute(
+        """
+        SELECT AVG(rating)
+        FROM feedback
+        """
+    )
+
+    avg_rating = cursor.fetchone()[0]
+
     return {
         "total_messages": total_messages,
         "total_customers": total_customers,
         "open_tickets": open_tickets,
-        "closed_tickets": closed_tickets
+        "closed_tickets": closed_tickets,
+        "in_progress_tickets": in_progress_tickets,
+        "average_rating": round(avg_rating, 2) if avg_rating else 0
     }
-
 
 def update_ticket_in_progress(
     ticket_id: str
@@ -458,3 +477,129 @@ def update_ticket_in_progress(
     )
 
     conn.commit()
+
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS feedback (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ticket_id TEXT,
+    rating INTEGER,
+    comment TEXT
+)
+""")
+
+conn.commit()
+
+
+def save_feedback(
+    ticket_id: str,
+    rating: int,
+    comment: str
+):
+
+    cursor.execute(
+        """
+        INSERT INTO feedback
+        (
+            ticket_id,
+            rating,
+            comment
+        )
+        VALUES (?, ?, ?)
+        """,
+        (
+            ticket_id,
+            rating,
+            comment
+        )
+    )
+
+    conn.commit()
+
+
+def get_feedbacks():
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM feedback
+        """
+    )
+
+    return cursor.fetchall()
+
+
+def get_average_rating():
+
+    cursor.execute(
+        """
+        SELECT AVG(rating)
+        FROM feedback
+        """
+    )
+
+    result = cursor.fetchone()
+
+    return round(result[0], 2) if result[0] else 0
+
+
+def get_customer_activity():
+
+    cursor.execute(
+        """
+        SELECT
+            name,
+            loan_interest,
+            credit_card_interest
+        FROM customers
+        """
+    )
+
+    return cursor.fetchall()
+
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS audit_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    action TEXT,
+    details TEXT
+)
+""")
+
+conn.commit()
+
+
+def save_audit_log(
+    action: str,
+    details: str
+):
+
+    cursor.execute(
+        """
+        INSERT INTO audit_logs
+        (
+            action,
+            details
+        )
+        VALUES (?, ?)
+        """,
+        (
+            action,
+            details
+        )
+    )
+
+    conn.commit()
+
+
+def get_audit_logs():
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM audit_logs
+        ORDER BY id DESC
+        """
+    )
+
+    return cursor.fetchall()

@@ -1,79 +1,88 @@
+
 from fastapi import FastAPI
-from app.services.auth import is_authenticated
-from app.services.database import search_customer
-from app.services.session_manager import create_session
-from app.services.config import GEMINI_API_KEY
-from app.services.gemini_service import ask_gemini
-from app.services.intent_classifier import (
-    classify_intent,
-    extract_customer_data
-)
-from app.services.database import (
-    get_customer_by_name
-)
-from app.services.knowledge_base import (
-    load_default_faqs
-)
-from app.services.memory import chat_history
-from app.services.customer_profile import customer_profile
-from app.services.ticket_manager import create_ticket
 from app.models.chat import (
     ChatRequest,
     ChatResponse
 )
-from app.services.auth import (
-    is_authenticated
-)
-from app.services.database import (
-    save_message,
-    get_chat_history,
-    search_faq,
-    get_ticket_status
-)
-from app.services.database import (
-    get_loan_customers,
-    get_credit_card_customers
-)
+from app.services.config import GEMINI_API_KEY
+from app.services.session_manager import create_session
+from app.services.auth import is_authenticated
 
-from app.services.database import (
-    save_message,
-    get_chat_history,
-    search_faq,
-    save_ticket,
-    save_intent,
-    save_customer
-)
-from app.services.chat_context import (
-    build_chat_context
-)
-from app.services.database import (
-    get_open_tickets
-)
 from app.services.gemini_service import (
+    ask_gemini,
+    ask_gemini_with_context,
     ask_gemini_with_history
 )
-from app.services.database import (
-    get_total_messages,
-    get_total_customers,
-    get_total_tickets,
-    get_intent_analytics
-)
+
 from app.services.rag_service import (
     get_rag_context
 )
 
-from app.services.gemini_service import (
-    ask_gemini_with_context
+from app.services.intent_classifier import (
+    classify_intent,
+    extract_customer_data
 )
+
+from app.services.knowledge_base import (
+    load_default_faqs
+)
+from app.services.memory import (
+    chat_history
+)
+
+from app.services.chat_context import (
+    build_chat_context
+)
+
+from app.services.customer_profile import (
+    customer_profile
+)
+
+from app.services.ticket_manager import (
+    create_ticket
+)
+
+# Database Services
 from app.services.database import (
-    get_closed_tickets
+    save_message,
+    get_chat_history,
+    search_faq,
+
+    save_ticket,
+    save_intent,
+    save_customer,
+
+    get_ticket_status,
+    update_ticket_in_progress,
+
+    get_open_tickets,
+    get_closed_tickets,
+
+    get_customer_by_name,
+    search_customer,
+
+    get_loan_customers,
+    get_credit_card_customers,
+
+    get_total_messages,
+    get_total_customers,
+    get_total_tickets,
+
+    get_intent_analytics,
+
+    get_dashboard_stats,
+
+    save_feedback,
+    get_feedbacks,
+    get_average_rating,
+
+    get_customer_activity,
+    save_audit_log,
+    get_audit_logs
 )
-from app.services.database import (
-    get_dashboard_stats
-)
-from app.services.database import (
-    update_ticket_in_progress
-)
+
+
+
 
 
 
@@ -878,6 +887,99 @@ def ticket_progress(
         ticket_id
     )
 
+    save_audit_log(
+        "ticket_in_progress",
+        ticket_id
+    )
+
     return {
         "status": "in_progress"
+    }
+
+@app.post("/feedback")
+def feedback(
+    ticket_id: str,
+    rating: int,
+    comment: str
+):
+
+    save_feedback(
+        ticket_id,
+        rating,
+        comment
+    )
+
+    return {
+        "status": "feedback_saved"
+    }
+
+@app.get("/feedbacks")
+def feedbacks():
+
+    return {
+        "feedbacks": get_feedbacks()
+    }
+
+
+@app.get("/average-rating")
+def average_rating():
+
+    return {
+        "average_rating": get_average_rating()
+    }
+
+@app.get("/customer-activity")
+def customer_activity():
+
+    return {
+        "customers": get_customer_activity()
+    }
+
+
+@app.put("/ticket-close")
+def ticket_close(
+    ticket_id: str
+):
+
+    update_ticket_status(
+        ticket_id,
+        "CLOSED"
+    )
+
+    save_audit_log(
+        "ticket_closed",
+        ticket_id
+    )
+
+    return {
+        "status": "closed"
+    }
+
+@app.get("/audit-logs")
+def audit_logs():
+
+    return {
+        "logs": get_audit_logs()
+    }
+
+
+@app.put("/ticket-close")
+def ticket_close(ticket_id: str):
+
+    print("CLOSING =", ticket_id)
+
+    update_ticket_status(
+        ticket_id,
+        "CLOSED"
+    )
+
+    save_audit_log(
+        "ticket_closed",
+        ticket_id
+    )
+
+    print("AUDIT SAVED")
+
+    return {
+        "status": "closed"
     }
