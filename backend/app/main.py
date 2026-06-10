@@ -167,6 +167,9 @@ def ask(message: str):
             f"Ticket ID: {ticket_id}"
         )
 
+
+  
+
     else:
 
         context = get_rag_context(
@@ -210,7 +213,7 @@ def chat(request: ChatRequest):
 
     extract_customer_data(message)
 
-    # customer persistence
+    # save customer
 
     if customer_profile["name"]:
 
@@ -219,6 +222,8 @@ def chat(request: ChatRequest):
             customer_profile["loan_interest"],
             customer_profile["credit_card_interest"]
         )
+
+    # save user message
 
     save_message(
         session_id,
@@ -247,7 +252,10 @@ def chat(request: ChatRequest):
     # intent classification
 
     intent = classify_intent(message)
+
     save_intent(intent)
+
+    # account opening
 
     if intent == "account_opening":
 
@@ -256,27 +264,33 @@ def chat(request: ChatRequest):
             "your ID, phone number and proof of address."
         )
 
+    # loan inquiry (RAG)
+
     elif intent == "loan_inquiry":
 
-         context = get_rag_context(
-         message
-    )
+        context = get_rag_context(
+            message
+        )
 
-         response = ask_gemini_with_context(
-         message,
-         context
-    )
+        response = ask_gemini_with_context(
+            message,
+            context
+        )
+
+    # credit card (RAG)
 
     elif intent == "credit_card_support":
 
-         context = get_rag_context(
-         message
-    )
+        context = get_rag_context(
+            message
+        )
 
-         response = ask_gemini_with_context(
-         message,
-         context
-    )
+        response = ask_gemini_with_context(
+            message,
+            context
+        )
+
+    # debit card
 
     elif intent == "debit_card_support":
 
@@ -284,34 +298,44 @@ def chat(request: ChatRequest):
             "Please provide your account number "
             "to request a new debit card."
         )
+
+    # card activation
+
     elif intent == "card_activation":
 
-         response = (
+        response = (
             "Please provide the last 4 digits "
-          "of your card to begin activation."
+            "of your card to begin activation."
         )
+
+    # pin reset
 
     elif intent == "pin_reset":
 
-         response = (
-           "For security reasons, PIN reset "
-          "requires identity verification."
-         )
+        response = (
+            "For security reasons, PIN reset "
+            "requires identity verification."
+        )
+
+    # card replacement
 
     elif intent == "card_replacement":
 
-         response = (
-         "Your replacement card request "
-          "has been created successfully."
-         )
+        response = (
+            "Your replacement card request "
+            "has been created successfully."
+        )
+
+    # card status
 
     elif intent == "card_status":
 
-         response = (
-           "Your card is currently active "
-           "and available for transactions."
-         )
+        response = (
+            "Your card is currently active "
+            "and available for transactions."
+        )
 
+    # card security
 
     elif intent == "card_security":
 
@@ -321,12 +345,16 @@ def chat(request: ChatRequest):
             "immediately and contact support."
         )
 
+    # balance inquiry
+
     elif intent == "balance_inquiry":
 
         response = (
             "For security reasons, balance inquiries "
             "require customer authentication."
         )
+
+    # money transfer
 
     elif intent == "money_transfer":
 
@@ -335,6 +363,8 @@ def chat(request: ChatRequest):
             "including recipient account information."
         )
 
+    # branch info
+
     elif intent == "branch_information":
 
         response = (
@@ -342,11 +372,15 @@ def chat(request: ChatRequest):
             "to find the nearest branch."
         )
 
+    # online banking
+
     elif intent == "online_banking_support":
 
         response = (
             "Please describe your online banking issue."
         )
+
+    # human handoff
 
     elif intent == "human_handoff":
 
@@ -363,16 +397,122 @@ def chat(request: ChatRequest):
             f"Ticket ID: {ticket_id}"
         )
 
-    else:
+    # complaint
 
-         context = get_rag_context(
-         message
+    elif intent == "complaint":
+
+        ticket_id = create_ticket()
+
+        save_ticket(
+            ticket_id,
+            session_id,
+            "complaint"
         )
 
-         response = ask_gemini_with_context(
-         message,
-         context
-    )
+        response = (
+            f"Complaint registered successfully. "
+            f"Ticket ID: {ticket_id}"
+        )
+
+    # service request
+
+    elif intent == "service_request":
+
+        ticket_id = create_ticket()
+
+        save_ticket(
+            ticket_id,
+            session_id,
+            "service_request"
+        )
+
+        response = (
+            f"Service request created successfully. "
+            f"Ticket ID: {ticket_id}"
+        )
+
+    # update phone
+
+    elif intent == "update_phone":
+
+        ticket_id = create_ticket()
+
+        save_ticket(
+            ticket_id,
+            session_id,
+            "update_phone"
+        )
+
+        response = (
+            f"Phone number update request created successfully. "
+            f"Ticket ID: {ticket_id}"
+        )
+
+    # update email
+
+    elif intent == "update_email":
+
+        ticket_id = create_ticket()
+
+        save_ticket(
+            ticket_id,
+            session_id,
+            "update_email"
+        )
+
+        response = (
+            f"Email update request created successfully. "
+            f"Ticket ID: {ticket_id}"
+        )
+
+    # update address
+
+    elif intent == "update_address":
+
+        ticket_id = create_ticket()
+
+        save_ticket(
+            ticket_id,
+            session_id,
+            "update_address"
+        )
+
+        response = (
+            f"Address update request created successfully. "
+            f"Ticket ID: {ticket_id}"
+        )
+
+    # kyc update
+
+    elif intent == "kyc_update":
+
+        ticket_id = create_ticket()
+
+        save_ticket(
+            ticket_id,
+            session_id,
+            "kyc_update"
+        )
+
+        response = (
+            f"KYC update request created successfully. "
+            f"Ticket ID: {ticket_id}"
+        )
+
+    # fallback ai
+
+    else:
+
+        context = get_rag_context(
+            message
+        )
+
+        response = ask_gemini_with_context(
+            message,
+            context
+        )
+
+    # save assistant response
 
     save_message(
         session_id,
@@ -385,7 +525,6 @@ def chat(request: ChatRequest):
         intent=intent,
         response=response
     )
-
 
 # database history
 
