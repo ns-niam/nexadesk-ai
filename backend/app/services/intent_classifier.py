@@ -107,6 +107,18 @@ def classify_intent(message: str):
 
     if any(keyword in message for keyword in human_keywords):
         return "human_handoff"
+    
+    elif any(keyword in message for keyword in card_activation_keywords):
+        return "card_activation"
+
+    elif any(keyword in message for keyword in pin_reset_keywords):
+        return "pin_reset"
+
+    elif any(keyword in message for keyword in card_replacement_keywords):
+        return "card_replacement"
+
+    elif any(keyword in message for keyword in card_status_keywords):
+        return "card_status"
 
     elif (
     "lost" in message and "card" in message
@@ -181,3 +193,34 @@ def extract_customer_data(message: str):
     if "credit card" in message_lower:
 
         customer_profile["credit_card_interest"] = True
+
+
+card_activation_keywords = [
+    "activate card",
+    "card activation",
+    "activate my card",
+    "new card activation"
+]
+
+pin_reset_keywords = [
+    "pin reset",
+    "forgot pin",
+    "change pin",
+    "reset pin",
+    "new pin"
+]
+
+card_replacement_keywords = [
+    "replace card",
+    "replacement card",
+    "new card",
+    "damaged card",
+    "expired card"
+]
+
+card_status_keywords = [
+    "card status",
+    "is my card active",
+    "card active",
+    "card information"
+]        

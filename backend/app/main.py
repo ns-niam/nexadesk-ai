@@ -284,6 +284,34 @@ def chat(request: ChatRequest):
             "Please provide your account number "
             "to request a new debit card."
         )
+    elif intent == "card_activation":
+
+         response = (
+            "Please provide the last 4 digits "
+          "of your card to begin activation."
+        )
+
+    elif intent == "pin_reset":
+
+         response = (
+           "For security reasons, PIN reset "
+          "requires identity verification."
+         )
+
+    elif intent == "card_replacement":
+
+         response = (
+         "Your replacement card request "
+          "has been created successfully."
+         )
+
+    elif intent == "card_status":
+
+         response = (
+           "Your card is currently active "
+           "and available for transactions."
+         )
+
 
     elif intent == "card_security":
 
