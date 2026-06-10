@@ -8,7 +8,9 @@ from app.services.intent_classifier import (
     classify_intent,
     extract_customer_data
 )
-
+from app.services.database import (
+    get_customer_by_name
+)
 from app.services.knowledge_base import (
     load_default_faqs
 )
@@ -19,7 +21,15 @@ from app.models.chat import (
     ChatRequest,
     ChatResponse
 )
-
+from app.services.auth import (
+    is_authenticated
+)
+from app.services.database import (
+    save_message,
+    get_chat_history,
+    search_faq,
+    get_ticket_status
+)
 from app.services.database import (
     get_loan_customers,
     get_credit_card_customers
@@ -758,3 +768,55 @@ def rag_test(
         "question": question,
         "retrieved_context": context
     }
+
+@app.get("/customer")
+def customer_search(
+    name: str
+):
+
+    return {
+        "customer": get_customer_by_name(name)
+    }
+
+@app.get("/auth-status")
+def auth_status():
+
+    return {
+        "authenticated": is_authenticated()
+    }    
+
+@app.get("/ticket-status")
+def ticket_status(
+    ticket_id: str
+):
+
+    return {
+        "ticket": get_ticket_status(
+            ticket_id
+        )
+    }
+
+@app.get("/ticket-status")
+def ticket_status(
+    ticket_id: str
+):
+
+    return {
+        "ticket": get_ticket_status(
+            ticket_id
+        )
+    }
+
+@app.put("/ticket-close")
+def ticket_close(
+    ticket_id: str
+):
+
+    update_ticket_status(
+        ticket_id,
+        "CLOSED"
+    )
+
+    return {
+        "status": "closed"
+    }    

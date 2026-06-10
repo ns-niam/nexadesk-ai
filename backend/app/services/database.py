@@ -332,3 +332,52 @@ def get_intent_analytics():
     )
 
     return cursor.fetchall()
+
+def get_customer_by_name(
+    name: str
+):
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM customers
+        WHERE name = ?
+        """,
+        (name,)
+    )
+
+    return cursor.fetchall()
+
+def get_ticket_status(
+    ticket_id: str
+):
+
+    cursor.execute(
+        """
+        SELECT status
+        FROM tickets
+        WHERE ticket_id = ?
+        """,
+        (ticket_id,)
+    )
+
+    return cursor.fetchone()
+
+def update_ticket_status(
+    ticket_id: str,
+    status: str
+):
+
+    cursor.execute(
+        """
+        UPDATE tickets
+        SET status = ?
+        WHERE ticket_id = ?
+        """,
+        (
+            status,
+            ticket_id
+        )
+    )
+
+    conn.commit()
