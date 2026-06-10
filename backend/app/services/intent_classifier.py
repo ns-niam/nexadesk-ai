@@ -114,18 +114,24 @@ def extract_customer_data(message: str):
         except Exception:
             pass
 
-    # loan interest
-
-    if "loan" in message_lower:
-
-        customer_profile["loan_interest"] = True
 
     # credit card interest
 
     if "credit card" in message_lower:
 
         customer_profile["credit_card_interest"] = True
+# customer id extraction
 
+    if "customer id" in message_lower:
+
+        try:
+
+             customer_profile["customer_id"] = (
+             message.split(":")[-1].strip()
+        )
+
+        except Exception:
+            pass
 
 
 account_keywords = [

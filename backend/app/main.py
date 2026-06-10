@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from app.services.auth import is_authenticated
 from app.services.database import search_customer
 from app.services.session_manager import create_session
 from app.services.config import GEMINI_API_KEY
@@ -349,11 +350,19 @@ def chat(request: ChatRequest):
 
     elif intent == "balance_inquiry":
 
-        response = (
-            "For security reasons, balance inquiries "
-            "require customer authentication."
+        if not is_authenticated():
+
+          response = (
+            "Authentication required. "
+            "Please provide your Customer ID."
         )
 
+        else:
+
+          response = (
+            "Authentication successful. "
+            "Balance information is available."
+        )
     # money transfer
 
     elif intent == "money_transfer":
@@ -435,7 +444,16 @@ def chat(request: ChatRequest):
 
     elif intent == "update_phone":
 
-        ticket_id = create_ticket()
+        if not is_authenticated():
+
+          response = (
+            "Authentication required. "
+            "Please provide your Customer ID."
+        )
+
+        else:
+
+          ticket_id = create_ticket()
 
         save_ticket(
             ticket_id,
@@ -444,10 +462,10 @@ def chat(request: ChatRequest):
         )
 
         response = (
-            f"Phone number update request created successfully. "
+            f"Phone number update request "
+            f"created successfully. "
             f"Ticket ID: {ticket_id}"
         )
-
     # update email
 
     elif intent == "update_email":
