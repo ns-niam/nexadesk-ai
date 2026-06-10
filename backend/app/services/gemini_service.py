@@ -124,3 +124,22 @@ def ask_gemini_with_context(
     )
 
     return response.text
+
+def ask_gemini_with_history(
+    message: str,
+    history: str
+):
+
+    prompt = f"""
+Conversation History:
+
+{history}
+
+Current User Message:
+
+{message}
+"""
+
+    return ask_gemini(
+        prompt
+    )

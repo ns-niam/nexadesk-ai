@@ -381,3 +381,80 @@ def update_ticket_status(
     )
 
     conn.commit()
+
+def get_open_tickets():
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM tickets
+        WHERE status = 'OPEN'
+        """
+    )
+
+    return cursor.fetchall()
+def get_closed_tickets():
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM tickets
+        WHERE status = 'CLOSED'
+        """
+    )
+
+    return cursor.fetchall()
+
+
+def get_dashboard_stats():
+
+    cursor.execute(
+        "SELECT COUNT(*) FROM chat_history"
+    )
+    total_messages = cursor.fetchone()[0]
+
+    cursor.execute(
+        "SELECT COUNT(*) FROM customers"
+    )
+    total_customers = cursor.fetchone()[0]
+
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM tickets
+        WHERE status = 'OPEN'
+        """
+    )
+    open_tickets = cursor.fetchone()[0]
+
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM tickets
+        WHERE status = 'CLOSED'
+        """
+    )
+    closed_tickets = cursor.fetchone()[0]
+
+    return {
+        "total_messages": total_messages,
+        "total_customers": total_customers,
+        "open_tickets": open_tickets,
+        "closed_tickets": closed_tickets
+    }
+
+
+def update_ticket_in_progress(
+    ticket_id: str
+):
+
+    cursor.execute(
+        """
+        UPDATE tickets
+        SET status = 'IN_PROGRESS'
+        WHERE ticket_id = ?
+        """,
+        (ticket_id,)
+    )
+
+    conn.commit()

@@ -43,7 +43,15 @@ from app.services.database import (
     save_intent,
     save_customer
 )
-
+from app.services.chat_context import (
+    build_chat_context
+)
+from app.services.database import (
+    get_open_tickets
+)
+from app.services.gemini_service import (
+    ask_gemini_with_history
+)
 from app.services.database import (
     get_total_messages,
     get_total_customers,
@@ -57,7 +65,15 @@ from app.services.rag_service import (
 from app.services.gemini_service import (
     ask_gemini_with_context
 )
-
+from app.services.database import (
+    get_closed_tickets
+)
+from app.services.database import (
+    get_dashboard_stats
+)
+from app.services.database import (
+    update_ticket_in_progress
+)
 
 
 
@@ -531,15 +547,14 @@ def chat(request: ChatRequest):
 
     else:
 
-        context = get_rag_context(
-            message
-        )
+      context = get_rag_context(
+        message
+    )
 
-        response = ask_gemini_with_context(
-            message,
-            context
-        )
-
+      response = ask_gemini_with_context(
+        message,
+        context
+    )
     # save assistant response
 
     save_message(
@@ -820,3 +835,49 @@ def ticket_close(
     return {
         "status": "closed"
     }    
+
+@app.get("/session-history")
+def session_history(
+    session_id: str
+):
+
+    return {
+        "history": get_chat_history(
+            session_id
+        )
+    }
+
+@app.get("/open-tickets")
+def open_tickets():
+
+    return {
+        "tickets": get_open_tickets()
+    }
+
+
+@app.get("/closed-tickets")
+def closed_tickets():
+
+    return {
+        "tickets": get_closed_tickets()
+    }
+
+
+@app.get("/dashboard")
+def dashboard():
+
+    return get_dashboard_stats()
+
+
+@app.put("/ticket-progress")
+def ticket_progress(
+    ticket_id: str
+):
+
+    update_ticket_in_progress(
+        ticket_id
+    )
+
+    return {
+        "status": "in_progress"
+    }
