@@ -87,19 +87,21 @@ from app.services.database import (
     get_audit_logs
 )
 
-
-
-
-
-
-
-
-# app config
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="NexaDesk AI",
     version="1.0.0"
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 load_default_faqs()
 
