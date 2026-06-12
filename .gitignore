@@ -1,7 +1,20 @@
+# Virtual Environment
+venv/
 backend/venv/
+
+# Environment Variables
+.env
 backend/.env
+
+# Python
 __pycache__/
 *.pyc
+
+# VS Code
 .vscode/
+
+# Logs
 *.log
+
+# OS Files
 .DS_Store

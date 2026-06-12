@@ -1,11 +1,6 @@
 import sqlite3
 
-
-
-conn = sqlite3.connect(
-    "nexadesk.db",
-    check_same_thread=False
-)
+conn = sqlite3.connect("nexadesk.db", check_same_thread=False)
 
 cursor = conn.cursor()
 
@@ -21,11 +16,7 @@ CREATE TABLE IF NOT EXISTS chat_history (
 conn.commit()
 
 
-def save_message(
-    session_id: str,
-    role: str,
-    message: str
-):
+def save_message(session_id: str, role: str, message: str):
 
     cursor.execute(
         """
@@ -37,19 +28,13 @@ def save_message(
         )
         VALUES (?, ?, ?)
         """,
-        (
-            session_id,
-            role,
-            message
-        )
+        (session_id, role, message),
     )
 
     conn.commit()
 
 
-def get_chat_history(
-    session_id: str
-):
+def get_chat_history(session_id: str):
 
     cursor.execute(
         """
@@ -58,10 +43,11 @@ def get_chat_history(
         WHERE session_id = ?
         ORDER BY id
         """,
-        (session_id,)
+        (session_id,),
     )
 
     return cursor.fetchall()
+
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS faq (
@@ -73,10 +59,8 @@ CREATE TABLE IF NOT EXISTS faq (
 
 conn.commit()
 
-def add_faq(
-    question: str,
-    answer: str
-):
+
+def add_faq(question: str, answer: str):
 
     cursor.execute(
         """
@@ -84,15 +68,13 @@ def add_faq(
         (question, answer)
         VALUES (?, ?)
         """,
-        (question, answer)
+        (question, answer),
     )
 
     conn.commit()
 
 
-def search_faq(
-    keyword: str
-):
+def search_faq(keyword: str):
 
     cursor.execute(
         """
@@ -101,7 +83,7 @@ def search_faq(
         WHERE question LIKE ?
         LIMIT 1
         """,
-        (f"%{keyword}%",)
+        (f"%{keyword}%",),
     )
 
     result = cursor.fetchone()
@@ -110,6 +92,7 @@ def search_faq(
         return result[0]
 
     return None
+
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS customers (
@@ -135,11 +118,8 @@ CREATE TABLE IF NOT EXISTS tickets (
 
 conn.commit()
 
-def save_customer(
-    name: str,
-    loan_interest: bool,
-    credit_card_interest: bool
-):
+
+def save_customer(name: str, loan_interest: bool, credit_card_interest: bool):
 
     cursor.execute(
         """
@@ -147,7 +127,7 @@ def save_customer(
         FROM customers
         WHERE name = ?
         """,
-        (name,)
+        (name,),
     )
 
     existing_customer = cursor.fetchone()
@@ -162,11 +142,7 @@ def save_customer(
                 credit_card_interest = ?
             WHERE name = ?
             """,
-            (
-                int(loan_interest),
-                int(credit_card_interest),
-                name
-            )
+            (int(loan_interest), int(credit_card_interest), name),
         )
 
     else:
@@ -181,20 +157,13 @@ def save_customer(
             )
             VALUES (?, ?, ?)
             """,
-            (
-                name,
-                int(loan_interest),
-                int(credit_card_interest)
-            )
+            (name, int(loan_interest), int(credit_card_interest)),
         )
 
     conn.commit()
 
-def save_ticket(
-    ticket_id: str,
-    session_id: str,
-    issue_type: str
-):
+
+def save_ticket(ticket_id: str, session_id: str, issue_type: str):
 
     cursor.execute(
         """
@@ -207,12 +176,7 @@ def save_ticket(
         )
         VALUES (?, ?, ?, ?)
         """,
-        (
-            ticket_id,
-            session_id,
-            issue_type,
-            "OPEN"
-        )
+        (ticket_id, session_id, issue_type, "OPEN"),
     )
 
     conn.commit()
@@ -220,36 +184,30 @@ def save_ticket(
 
 def get_total_messages():
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT COUNT(*)
         FROM chat_history
-        """
-    )
+        """)
 
     return cursor.fetchone()[0]
 
 
 def get_total_customers():
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT COUNT(*)
         FROM customers
-        """
-    )
+        """)
 
     return cursor.fetchone()[0]
 
 
 def get_total_tickets():
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT COUNT(*)
         FROM tickets
-        """
-    )
+        """)
 
     return cursor.fetchone()[0]
 
@@ -262,7 +220,7 @@ def search_customer(name: str):
         FROM customers
         WHERE name LIKE ?
         """,
-        (f"%{name}%",)
+        (f"%{name}%",),
     )
 
     return cursor.fetchall()
@@ -270,26 +228,22 @@ def search_customer(name: str):
 
 def get_loan_customers():
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT COUNT(*)
         FROM customers
         WHERE loan_interest = 1
-        """
-    )
+        """)
 
     return cursor.fetchone()[0]
 
 
 def get_credit_card_customers():
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT COUNT(*)
         FROM customers
         WHERE credit_card_interest = 1
-        """
-    )
+        """)
 
     return cursor.fetchone()[0]
 
@@ -304,7 +258,6 @@ CREATE TABLE IF NOT EXISTS intent_logs (
 conn.commit()
 
 
-
 def save_intent(intent: str):
 
     cursor.execute(
@@ -313,29 +266,25 @@ def save_intent(intent: str):
         (intent)
         VALUES (?)
         """,
-        (intent,)
+        (intent,),
     )
 
     conn.commit()
 
 
-
 def get_intent_analytics():
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT intent, COUNT(*)
         FROM intent_logs
         GROUP BY intent
         ORDER BY COUNT(*) DESC
-        """
-    )
+        """)
 
     return cursor.fetchall()
 
-def get_customer_by_name(
-    name: str
-):
+
+def get_customer_by_name(name: str):
 
     cursor.execute(
         """
@@ -343,14 +292,13 @@ def get_customer_by_name(
         FROM customers
         WHERE name = ?
         """,
-        (name,)
+        (name,),
     )
 
     return cursor.fetchall()
 
-def get_ticket_status(
-    ticket_id: str
-):
+
+def get_ticket_status(ticket_id: str):
 
     cursor.execute(
         """
@@ -358,15 +306,13 @@ def get_ticket_status(
         FROM tickets
         WHERE ticket_id = ?
         """,
-        (ticket_id,)
+        (ticket_id,),
     )
 
     return cursor.fetchone()
 
-def update_ticket_status(
-    ticket_id: str,
-    status: str
-):
+
+def update_ticket_status(ticket_id: str, status: str):
 
     cursor.execute(
         """
@@ -374,84 +320,73 @@ def update_ticket_status(
         SET status = ?
         WHERE ticket_id = ?
         """,
-        (
-            status,
-            ticket_id
-        )
+        (status, ticket_id),
     )
 
     conn.commit()
 
+
 def get_open_tickets():
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT *
         FROM tickets
         WHERE status = 'OPEN'
-        """
-    )
+        """)
 
     return cursor.fetchall()
+
+
 def get_closed_tickets():
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT *
         FROM tickets
         WHERE status = 'CLOSED'
-        """
-    )
+        """)
 
     return cursor.fetchall()
 
 
 def get_dashboard_stats():
 
-    cursor.execute(
-        "SELECT COUNT(*) FROM chat_history"
-    )
+    cursor.execute("SELECT COUNT(*) FROM chat_history")
     total_messages = cursor.fetchone()[0]
 
-    cursor.execute(
-        "SELECT COUNT(*) FROM customers"
-    )
+    cursor.execute("SELECT COUNT(*) FROM customers")
     total_customers = cursor.fetchone()[0]
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT COUNT(*)
         FROM tickets
         WHERE status = 'OPEN'
-        """
-    )
+        """)
     open_tickets = cursor.fetchone()[0]
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT COUNT(*)
         FROM tickets
         WHERE status = 'CLOSED'
-        """
-    )
+        """)
     closed_tickets = cursor.fetchone()[0]
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT COUNT(*)
         FROM tickets
         WHERE status = 'IN_PROGRESS'
-        """
-    )
+        """)
     in_progress_tickets = cursor.fetchone()[0]
 
-    cursor.execute(
-        """
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM feedback
+        """)
+    total_feedbacks = cursor.fetchone()[0]
+
+    cursor.execute("""
         SELECT AVG(rating)
         FROM feedback
-        """
-    )
-
+        """)
     avg_rating = cursor.fetchone()[0]
 
     return {
@@ -460,42 +395,12 @@ def get_dashboard_stats():
         "open_tickets": open_tickets,
         "closed_tickets": closed_tickets,
         "in_progress_tickets": in_progress_tickets,
-        "average_rating": round(avg_rating, 2) if avg_rating else 0
+        "total_feedbacks": total_feedbacks,
+        "average_rating": round(avg_rating, 2) if avg_rating else 0,
     }
 
-def update_ticket_in_progress(
-    ticket_id: str
-):
 
-    cursor.execute(
-        """
-        UPDATE tickets
-        SET status = 'IN_PROGRESS'
-        WHERE ticket_id = ?
-        """,
-        (ticket_id,)
-    )
-
-    conn.commit()
-
-
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS feedback (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    ticket_id TEXT,
-    rating INTEGER,
-    comment TEXT
-)
-""")
-
-conn.commit()
-
-
-def save_feedback(
-    ticket_id: str,
-    rating: int,
-    comment: str
-):
+def save_feedback(ticket_id: str, rating: int, comment: str):
 
     cursor.execute(
         """
@@ -507,11 +412,7 @@ def save_feedback(
         )
         VALUES (?, ?, ?)
         """,
-        (
-            ticket_id,
-            rating,
-            comment
-        )
+        (ticket_id, rating, comment),
     )
 
     conn.commit()
@@ -519,24 +420,20 @@ def save_feedback(
 
 def get_feedbacks():
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT *
         FROM feedback
-        """
-    )
+        """)
 
     return cursor.fetchall()
 
 
 def get_average_rating():
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT AVG(rating)
         FROM feedback
-        """
-    )
+        """)
 
     result = cursor.fetchone()
 
@@ -545,15 +442,13 @@ def get_average_rating():
 
 def get_customer_activity():
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT
             name,
             loan_interest,
             credit_card_interest
         FROM customers
-        """
-    )
+        """)
 
     return cursor.fetchall()
 
@@ -569,10 +464,7 @@ CREATE TABLE IF NOT EXISTS audit_logs (
 conn.commit()
 
 
-def save_audit_log(
-    action: str,
-    details: str
-):
+def save_audit_log(action: str, details: str):
 
     cursor.execute(
         """
@@ -583,10 +475,7 @@ def save_audit_log(
         )
         VALUES (?, ?)
         """,
-        (
-            action,
-            details
-        )
+        (action, details),
     )
 
     conn.commit()
@@ -594,12 +483,51 @@ def save_audit_log(
 
 def get_audit_logs():
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT *
         FROM audit_logs
         ORDER BY id DESC
-        """
-    )
+        """)
 
     return cursor.fetchall()
+
+
+def get_feedback_stats():
+
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM feedback
+        """)
+
+    total_feedbacks = cursor.fetchone()[0]
+
+    cursor.execute("""
+        SELECT AVG(rating)
+        FROM feedback
+        """)
+
+    avg_rating = cursor.fetchone()[0]
+
+
+
+
+    return {
+    "total_feedbacks": total_feedbacks,
+    "average_rating": round(avg_rating, 2) if avg_rating else 0,
+}
+
+
+def update_ticket_in_progress(
+    ticket_id: str
+):
+
+    cursor.execute(
+        """
+        UPDATE tickets
+        SET status = 'IN_PROGRESS'
+        WHERE ticket_id = ?
+        """,
+        (ticket_id,)
+    )
+
+    conn.commit()

@@ -4,6 +4,11 @@ from app.models.chat import (
     ChatRequest,
     ChatResponse
 )
+from fastapi import Depends
+
+from app.services.security import (
+    verify_api_key
+)
 from app.services.config import GEMINI_API_KEY
 from app.services.session_manager import create_session
 from app.services.auth import is_authenticated
@@ -44,6 +49,7 @@ from app.services.ticket_manager import (
 
 # Database Services
 from app.services.database import (
+    get_feedback_stats,
     save_message,
     get_chat_history,
     search_faq,
@@ -204,7 +210,7 @@ def ask(message: str):
         )
 
 
-  
+
 
     else:
 
@@ -807,7 +813,7 @@ def auth_status():
 
     return {
         "authenticated": is_authenticated()
-    }    
+    }
 
 @app.get("/ticket-status")
 def ticket_status(
@@ -843,7 +849,7 @@ def ticket_close(
 
     return {
         "status": "closed"
-    }    
+    }
 
 @app.get("/session-history")
 def session_history(
@@ -857,15 +863,22 @@ def session_history(
     }
 
 @app.get("/open-tickets")
-def open_tickets():
+def open_tickets(
+    _: str = Depends(
+        verify_api_key
+    )
+):
 
     return {
         "tickets": get_open_tickets()
     }
 
-
 @app.get("/closed-tickets")
-def closed_tickets():
+def closed_tickets(
+    _: str = Depends(
+        verify_api_key
+    )
+):
 
     return {
         "tickets": get_closed_tickets()
@@ -873,7 +886,11 @@ def closed_tickets():
 
 
 @app.get("/dashboard")
-def dashboard():
+def dashboard(
+    _: str = Depends(
+        verify_api_key
+    )
+):
 
     return get_dashboard_stats()
 
@@ -929,7 +946,11 @@ def average_rating():
     }
 
 @app.get("/customer-activity")
-def customer_activity():
+def customer_activity(
+    _: str = Depends(
+        verify_api_key
+    )
+):
 
     return {
         "customers": get_customer_activity()
@@ -956,7 +977,11 @@ def ticket_close(
     }
 
 @app.get("/audit-logs")
-def audit_logs():
+def audit_logs(
+    _: str = Depends(
+        verify_api_key
+    )
+):
 
     return {
         "logs": get_audit_logs()
@@ -983,3 +1008,26 @@ def ticket_close(ticket_id: str):
     return {
         "status": "closed"
     }
+
+@app.get("/feedback-stats")
+def feedback_stats():
+
+    return get_feedback_stats()
+
+
+
+@app.get("/health")
+def health():
+
+    return {
+        "status": "healthy",
+        "service": "NexaDesk AI"
+    }
+
+
+
+@app.get("/dashboard")
+def dashboard(
+    _: str = Depends(verify_api_key)
+):
+    return get_dashboard_stats()
