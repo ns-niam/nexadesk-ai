@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import "./App.css";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -60,6 +61,10 @@ function App() {
     }
   };
 
+  const clearChat = () => {
+    setMessages([]);
+  };
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({
       behavior: "smooth",
@@ -67,89 +72,49 @@ function App() {
   }, [messages, loading]);
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        background: "#0f172a",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "20px",
-        boxSizing: "border-box",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "1200px",
-          height: "95vh",
-          background: "#111827",
-          borderRadius: "20px",
-          overflow: "hidden",
-          display: "flex",
-          flexDirection: "column",
-          boxShadow: "0 10px 40px rgba(0,0,0,0.4)",
-        }}
-      >
-        {/* Header */}
-        <div
-          style={{
-            padding: "20px",
-            borderBottom: "1px solid #374151",
-            color: "white",
-            fontSize: "24px",
-            fontWeight: "bold",
-          }}
+    <div className="app">
+      <div className="sidebar">
+        <h2>NexaDesk</h2>
+
+        <button
+          className="new-chat-btn"
+          onClick={clearChat}
         >
-          NexaDesk AI
+          + New Chat
+        </button>
+
+        <div className="sidebar-item">
+          Banking Assistant
+        </div>
+      </div>
+
+      <div className="chat-container">
+        <div className="header">
+          🏦 NexaDesk AI Assistant
         </div>
 
-        {/* Chat Area */}
-        <div
-          style={{
-            flex: 1,
-            overflowY: "auto",
-            padding: "20px",
-          }}
-        >
+        <div className="messages">
           {messages.length === 0 && (
-            <div
-              style={{
-                color: "#9ca3af",
-                textAlign: "center",
-                marginTop: "120px",
-                fontSize: "18px",
-              }}
-            >
-              Welcome to NexaDesk AI
+            <div className="welcome">
+              Welcome to NexaDesk AI 🚀
             </div>
           )}
 
           {messages.map((msg, index) => (
             <div
               key={index}
-              style={{
-                display: "flex",
-                justifyContent:
-                  msg.sender === "user"
-                    ? "flex-end"
-                    : "flex-start",
-                marginBottom: "16px",
-              }}
+              className={
+                msg.sender === "user"
+                  ? "message-row user"
+                  : "message-row ai"
+              }
             >
               <div
-                style={{
-                  maxWidth: "75%",
-                  padding: "14px 18px",
-                  borderRadius: "18px",
-                  background:
-                    msg.sender === "user"
-                      ? "#2563eb"
-                      : "#1f2937",
-                  color: "white",
-                  lineHeight: "1.6",
-                  wordBreak: "break-word",
-                }}
+                className={
+                  msg.sender === "user"
+                    ? "message user-bubble"
+                    : "message ai-bubble"
+                }
               >
                 {msg.text}
               </div>
@@ -157,12 +122,7 @@ function App() {
           ))}
 
           {loading && (
-            <div
-              style={{
-                color: "#9ca3af",
-                padding: "10px",
-              }}
-            >
+            <div className="typing">
               NexaDesk AI is typing...
             </div>
           )}
@@ -170,53 +130,21 @@ function App() {
           <div ref={messagesEndRef}></div>
         </div>
 
-        {/* Input Area */}
-        <div
-          style={{
-            padding: "20px",
-            borderTop: "1px solid #374151",
-            display: "flex",
-            gap: "10px",
-          }}
-        >
+        <div className="input-area">
           <input
-            type="text"
             value={message}
             onChange={(e) =>
               setMessage(e.target.value)
             }
-            placeholder="Ask anything..."
-            style={{
-              flex: 1,
-              padding: "14px",
-              borderRadius: "12px",
-              border: "none",
-              outline: "none",
-              background: "#1f2937",
-              color: "white",
-              fontSize: "16px",
-            }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 sendMessage();
               }
             }}
+            placeholder="Ask about cards, accounts, transfers..."
           />
 
-          <button
-            onClick={sendMessage}
-            disabled={loading}
-            style={{
-              padding: "14px 24px",
-              border: "none",
-              borderRadius: "12px",
-              background: "#2563eb",
-              color: "white",
-              cursor: "pointer",
-              fontWeight: "bold",
-              fontSize: "16px",
-            }}
-          >
+          <button onClick={sendMessage}>
             Send
           </button>
         </div>
