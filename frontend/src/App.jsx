@@ -1,15 +1,21 @@
-import { useState } from "react";
 
+import SettingsPage
+  from "./pages/SettingsPage";
 import "./App.css";
 import ChatPage
-from "./pages/ChatPage";
+  from "./pages/ChatPage";
+import AuditLogsPage
+  from "./pages/AuditLogsPage";
 
+import HistoryPage
+  from "./pages/HistoryPage";
 
 import Sidebar from "./components/Sidebar";
-
+import { useState } from "react";
 import DashboardPage from "./pages/DashboardPage";
 import TicketsPage from "./pages/TicketsPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
+
 
 function App() {
 
@@ -19,6 +25,8 @@ function App() {
     setActivePage] =
     useState("Chat");
 
+  const [theme, setTheme] =
+    useState("blue");
 
 
   // Page Router
@@ -26,7 +34,7 @@ function App() {
   const renderPage = () => {
 
     switch (
-      activePage
+    activePage
     ) {
 
       case "Dashboard":
@@ -43,19 +51,18 @@ function App() {
         return (
           <AnalyticsPage />
         );
+      case "Audit Logs":
+        return (
+          <AuditLogsPage />
+        );
 
       case "Settings":
         return (
-          <div
-            style={{
-              padding: "30px",
-              color: "white",
-            }}
-          >
-            <h1>
-              Settings
-            </h1>
-          </div>
+          <SettingsPage />
+        );
+      case "History":
+        return (
+          <HistoryPage />
         );
 
       default:

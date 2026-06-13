@@ -4,7 +4,8 @@ from fastapi.security import APIKeyHeader
 from app.services.config import API_KEY
 
 api_key_header = APIKeyHeader(
-    name="X-API-KEY"
+    name="X-API-KEY",
+    description="API Key for authentication"
 )
 
 

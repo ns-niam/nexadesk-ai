@@ -3,13 +3,15 @@ function Sidebar({
   setActivePage
 }) {
 
-  const menuItems = [
-    "Chat",
-    "Dashboard",
-    "Tickets",
-    "Analytics",
-    "Settings"
-  ];
+const menuItems = [
+  "Chat",
+  "History",
+  "Dashboard",
+  "Tickets",
+  "Analytics",
+  "Audit Logs",
+  "Settings"
+];
 
   return (
     <div className="sidebar">

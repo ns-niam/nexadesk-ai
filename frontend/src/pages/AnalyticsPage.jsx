@@ -29,31 +29,31 @@ function AnalyticsPage() {
     const loadAnalytics =
       async () => {
 
-      try {
+        try {
 
-        const activityData =
-          await getCustomerActivity();
+          const activityData =
+            await getCustomerActivity();
 
-        const feedbackData =
-          await getFeedbacks();
+          const feedbackData =
+            await getFeedbacks();
 
-        setActivities(
-          activityData.activities || []
-        );
+          setActivities(
+            activityData.customers || []
+          );
 
-        setFeedbacks(
-          feedbackData.feedbacks || []
-        );
+          setFeedbacks(
+            feedbackData.feedbacks || []
+          );
 
-      } catch (
+        } catch (
         error
-      ) {
+        ) {
 
-        console.log(
-          error
-        );
-      }
-    };
+          console.log(
+            error
+          );
+        }
+      };
 
     loadAnalytics();
 

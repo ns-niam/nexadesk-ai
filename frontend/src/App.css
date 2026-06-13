@@ -11,8 +11,10 @@
   --panel: #111827;
   --panel-2: #1f2937;
   --border: #374151;
-  --primary: #2563eb;
+
+  --primary-color: #2563eb;
   --primary-hover: #1d4ed8;
+
   --text: #ffffff;
   --muted: #94a3b8;
 }
@@ -82,7 +84,7 @@ body {
 
   border-radius: 14px;
 
-  background: var(--primary);
+  background: var(--primary-color);
 
   color: white;
 
@@ -140,8 +142,8 @@ body {
 }
 
 .sidebar-item.active {
-  background: #2563eb;
-  color: white;
+  background:
+    var(--primary-color);
 }
 
 
@@ -329,7 +331,7 @@ body {
 }
 
 .input-area input:focus {
-  border-color: var(--primary);
+  border-color: var(--primary-color);
 }
 
 .input-area button {
@@ -339,7 +341,7 @@ body {
 
   border-radius: 14px;
 
-  background: var(--primary);
+  background: var(--primary-color);
 
   color: white;
 
@@ -398,4 +400,20 @@ body {
   .input-area button {
     width: 100%;
   }
+}
+
+
+.settings-card {
+  background: #1f2937;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid #374151;
+}
+
+.settings-card h2 {
+  margin-bottom: 10px;
+}
+
+.settings-card p {
+  color: #cbd5e1;
 }
