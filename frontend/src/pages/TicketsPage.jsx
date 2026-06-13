@@ -2,13 +2,13 @@ import {
   useEffect,
   useState
 }
-from "react";
+  from "react";
 
 import {
   getOpenTickets,
   getClosedTickets
 }
-from "../services/api";
+  from "../services/api";
 
 function TicketsPage() {
 
@@ -31,31 +31,31 @@ function TicketsPage() {
     const loadTickets =
       async () => {
 
-      try {
+        try {
 
-        const openData =
-          await getOpenTickets();
+          const openData =
+            await getOpenTickets();
 
-        const closedData =
-          await getClosedTickets();
+          const closedData =
+            await getClosedTickets();
 
-        setOpenTickets(
-          openData.tickets || []
-        );
+          setOpenTickets(
+            openData.tickets || []
+          );
 
-        setClosedTickets(
-          closedData.tickets || []
-        );
+          setClosedTickets(
+            closedData.tickets || []
+          );
 
-      } catch (
+        } catch (
         error
-      ) {
+        ) {
 
-        console.log(
-          error
-        );
-      }
-    };
+          console.log(
+            error
+          );
+        }
+      };
 
     loadTickets();
 
@@ -68,6 +68,8 @@ function TicketsPage() {
       style={{
         padding: "30px",
         color: "white",
+        overflowY: "auto",
+        height: "100vh",
       }}
     >
       <h1>
@@ -101,11 +103,27 @@ function TicketsPage() {
                 "10px",
             }}
           >
-            {
-              JSON.stringify(
-                ticket
-              )
-            }
+            <>
+              <h3>
+                Ticket ID:
+                {ticket[1]}
+              </h3>
+
+              <p>
+                Customer:
+                {ticket[2]}
+              </p>
+
+              <p>
+                Intent:
+                {ticket[3]}
+              </p>
+
+              <p>
+                Status:
+                {ticket[4]}
+              </p>
+            </>
           </div>
         )
       )}
@@ -129,19 +147,44 @@ function TicketsPage() {
             style={{
               background:
                 "#1f2937",
+
               padding:
-                "12px",
+                "18px",
+
               marginBottom:
-                "10px",
+                "15px",
+
               borderRadius:
-                "10px",
+                "14px",
+
+              border:
+                "1px solid #374151",
             }}
           >
-            {
-              JSON.stringify(
-                ticket
-              )
-            }
+            <>
+              <h3>
+                Ticket ID:
+                {ticket[1]}
+              </h3>
+
+              <p>
+                Customer:
+                {ticket[2]}
+              </p>
+
+              <p>
+                Intent:
+                {ticket[3]}
+              </p>
+
+              <p>
+                Status:
+                {ticket[4]}
+              </p>
+            </>
+
+
+
           </div>
         )
       )}

@@ -1,100 +1,142 @@
 
 
+const API_KEY = "nexadesk-secret-key";
+
 const BASE_URL =
-  "https://crispy-rotary-phone-q749q77g55jv29vrg-8000.app.github.dev";
+"https://crispy-rotary-phone-q749q77g55jv29vrg-8000.app.github.dev";
 
+//Headers
 
+const headers = {
+"Content-Type":
+"application/json",
+
+"X-API-Key":
+API_KEY,
+};
+
+// Chat
 
 export const sendChatMessage =
-  async (
-    sessionId,
-    message
-  ) => {
+async (
+sessionId,
+message
+) => {
 
-    const response =
-      await fetch(
-        `${BASE_URL}/chat`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-          body: JSON.stringify({
-            session_id:
-              sessionId,
-            message,
-          }),
-        }
-      );
 
-    return response.json();
-  };
+const response =
+  await fetch(
+    `${BASE_URL}/chat`,
+    {
+      method: "POST",
+
+      headers,
+
+      body: JSON.stringify({
+        session_id:
+          sessionId,
+
+        message,
+      }),
+    }
+  );
+
+return response.json();
+
+
+};
 
 // Dashboard
 
 export const getDashboard =
-  async () => {
+async () => {
 
-    const response =
-      await fetch(
-        `${BASE_URL}/dashboard`
-      );
 
-    return response.json();
-  };
+const response =
+  await fetch(
+    `${BASE_URL}/dashboard`,
+    {
+      headers,
+    }
+  );
+
+return response.json();
+
+
+};
 
 // Open Tickets
 
 export const getOpenTickets =
-  async () => {
+async () => {
 
-    const response =
-      await fetch(
-        `${BASE_URL}/open-tickets`
-      );
 
-    return response.json();
-  };
+const response =
+  await fetch(
+    `${BASE_URL}/open-tickets`,
+    {
+      headers,
+    }
+  );
+
+return response.json();
+
+
+};
 
 // Closed Tickets
 
 export const getClosedTickets =
-  async () => {
+async () => {
 
-    const response =
-      await fetch(
-        `${BASE_URL}/closed-tickets`
-      );
 
-    return response.json();
-  };
+const response =
+  await fetch(
+    `${BASE_URL}/closed-tickets`,
+    {
+      headers,
+    }
+  );
+
+return response.json();
+
+
+};
 
 // Customer Activity
 
 export const getCustomerActivity =
-  async () => {
+async () => {
 
-    const response =
-      await fetch(
-        `${BASE_URL}/customer-activity`
-      );
 
-    return response.json();
-  };
+const response =
+  await fetch(
+    `${BASE_URL}/customer-activity`,
+    {
+      headers,
+    }
+  );
+
+return response.json();
+
+
+};
 
 // Feedbacks
 
 export const getFeedbacks =
-  async () => {
-
-    const response =
-      await fetch(
-        `${BASE_URL}/feedbacks`
-      );
-
-    return response.json();
-  };
-// Tickets
+async () => {
 
 
+const response =
+  await fetch(
+    `${BASE_URL}/feedbacks`,
+    {
+      headers,
+    }
+  );
+
+return response.json();
+
+
+};

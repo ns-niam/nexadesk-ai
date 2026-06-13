@@ -855,7 +855,10 @@ def ticket_close(
 
 @app.get("/session-history")
 def session_history(
-    session_id: str
+    session_id: str,
+    _: str = Depends(
+        verify_api_key
+    )
 ):
 
     return {
