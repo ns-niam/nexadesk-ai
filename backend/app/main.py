@@ -47,7 +47,7 @@ from app.services.ticket_manager import (
     create_ticket
 )
 
-# Database Services
+
 from app.services.database import (
     get_feedback_stats,
     save_message,
@@ -888,11 +888,7 @@ def closed_tickets(
 
 
 @app.get("/dashboard")
-def dashboard(
-    _: str = Depends(
-        verify_api_key
-    )
-):
+def dashboard():
 
     return get_dashboard_stats()
 
