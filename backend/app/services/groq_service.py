@@ -35,6 +35,9 @@ def ask_groq(message: str):
             .content
         )
 
-    except Exception as e:
+    except Exception:
 
-        return f"Groq Error: {str(e)}"
+        return (
+        "NexaDesk AI is temporarily unavailable. "
+        "Please try again in a few moments."
+    )

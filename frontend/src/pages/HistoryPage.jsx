@@ -78,7 +78,7 @@ function HistoryPage() {
               {item[0] ===
               "user"
                 ? "👤 User"
-                : "🤖 AI"}
+                : " AI"}
 
             </strong>
 

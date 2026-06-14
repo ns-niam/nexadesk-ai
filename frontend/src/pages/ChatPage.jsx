@@ -178,7 +178,7 @@ function ChatPage() {
       <div
         className="header"
       >
-        🏦 NexaDesk AI
+         NexaDesk AI
       </div>
 
       <div
@@ -241,7 +241,7 @@ function ChatPage() {
           <div
             className="typing"
           >
-            🤖 NexaDesk AI
+             NexaDesk AI
             is thinking...
           </div>
         )}

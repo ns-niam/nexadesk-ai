@@ -19,7 +19,7 @@ def load_default_faqs():
 ("bye", "Thank you for contacting NexaDesk. Have a great day."),
 ("how are you", "I'm ready to assist you with your banking and support needs."),
 ("tell me about you", "I am NexaDesk AI, a virtual banking assistant designed to help customers with banking services and support requests."),
-("who created you", "I am part of the NexaDesk platform and designed to assist customers with banking services."),
+("who created you", "I am part of the NexaDesk platform and designed By (NS NIAM) to assist customers with banking services."),
 ("what is your purpose", "My purpose is to help customers with banking information, support requests and service guidance."),
 ("no", "No problem. Please let me know if there is anything else I can assist you with."),
 ("okay", "Alright. Please let me know if you need any assistance."),
@@ -27,6 +27,7 @@ def load_default_faqs():
 ("what", "Could you please provide more details so I can assist you?"),
 ("help", "I can assist with accounts, cards, digital banking and customer support."),
 ("ai", "I am NexaDesk AI, your virtual banking support assistant."),
+("who created you", "I am NexaDesk AI, developed By (NS-NIAM) to assist customers with banking and support requests."),
 # Identity
 
 ("who are you", "I am NexaDesk AI, your virtual banking support assistant."),
@@ -43,23 +44,17 @@ def load_default_faqs():
 ("minimum balance", "Minimum balance requirements vary depending on the account type."),
 ("account locked", "Your account may require identity verification before access can be restored."),
 ("close account", "Account closure requires identity verification and account review."),
-("i need a card",
- "Please specify whether you need a debit card or credit card."),
+("i need a card","Please specify whether you need a debit card or credit card."),
 
-("need card",
- "Please specify whether you need a debit card or credit card."),
+("need card","Please specify whether you need a debit card or credit card."),
+("reset pin","PIN reset requires identity verification."),
 
-("reset pin",
- "PIN reset requires identity verification."),
-
-("i forgot my pin",
- "PIN reset requires identity verification."),
+("i forgot my pin","PIN reset requires identity verification."),
 ("hmm", "Could you please provide more details?"),
 ("ok", "Alright. Please let me know if you need any assistance."),
 ("okay", "Alright. Please let me know if you need any assistance."),
 ("ai", "I am NexaDesk AI, your virtual banking assistant."),
-("change pin",
- "PIN reset requires identity verification."),
+("change pin","PIN reset requires identity verification."),
 # Cards
 
 ("credit card", "Credit cards are available for eligible customers and can be used for purchases and payments."),
@@ -92,7 +87,8 @@ def load_default_faqs():
 ("murabaha", "Murabaha is a Sharia-compliant financing arrangement based on cost-plus pricing."),
 ("ijara", "Ijara is a leasing-based financing solution available for eligible customers."),
 ("profit sharing", "Profit-sharing returns depend on the selected product and applicable terms."),
-
+("i want to create","Please specify what you would like to create or apply for. We can assist with new accounts, cards, financing services, and digital banking."
+)
 ]
 
 

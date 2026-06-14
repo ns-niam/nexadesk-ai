@@ -101,7 +101,7 @@ def search_faq(message: str):
             best_score = score
             best_answer = answer
 
-    if best_score >= 0.55:
+    if best_score >= 0.75:
         return best_answer
 
     return None
