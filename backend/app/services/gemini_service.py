@@ -1,10 +1,12 @@
-import google.generativeai as genai  # type: ignore[import]
+import google.generativeai as genai
 
 from app.services.memory import chat_history
 from app.services.config import GEMINI_API_KEY
 
 
-genai.configure(api_key=GEMINI_API_KEY)
+genai.configure(
+    api_key=GEMINI_API_KEY
+)
 
 model = genai.GenerativeModel(
     "gemini-2.5-flash"
@@ -21,12 +23,25 @@ def build_history():
     for item in chat_history[-20:]:
 
         if "user" in item:
-            history_text += f"Customer: {item['user']}\n"
+            history_text += (
+                f"Customer: {item['user']}\n"
+            )
 
         elif "assistant" in item:
-            history_text += f"Assistant: {item['assistant']}\n"
+            history_text += (
+                f"Assistant: {item['assistant']}\n"
+            )
 
     return history_text
+
+
+def clean_response(text: str):
+
+    text = text.replace("*", "")
+    text = text.replace("#", "")
+    text = text.replace("```", "")
+
+    return text.strip()
 
 
 def ask_gemini(user_message: str):
@@ -38,40 +53,20 @@ def ask_gemini(user_message: str):
         system_prompt = """
 You are NexaDesk AI.
 
-You are an enterprise-grade banking customer support assistant.
+You are a professional banking and customer support assistant.
 
-Responsibilities:
+Rules:
 
-- Account Opening
-- Savings Accounts
-- Current Accounts
-- Loans
-- Credit Cards
-- Debit Cards
-- ATM Services
-- Online Banking
-- Mobile Banking
-- Branch Information
-- Customer Support
-
-Behavior Rules:
-
-1. Always identify yourself as NexaDesk AI.
-2. Never mention Gemini.
-3. Never mention Google AI.
-4. Be professional.
-5. Be concise.
-6. Be customer friendly.
-7. Use conversation history when available.
-8. Remember customer information from previous messages.
-9. Ask follow-up questions when information is missing.
-10. Format responses clearly.
-
-Response Style:
-
-- Greeting
-- Direct Answer
-- Next Action
+1. Be professional and concise.
+2. Answer only the user's question.
+3. Use a maximum of 2 sentences.
+4. Do not provide unnecessary explanations.
+5. Use conversation history when relevant.
+6. Ask for clarification if needed.
+7. Never mention Gemini or Google AI.
+8. Do not use markdown.
+9. Do not invent information.
+10. If information is unavailable, politely say so.
 """
 
         full_prompt = f"""
@@ -90,40 +85,52 @@ Current Customer Message:
             full_prompt
         )
 
-        return response.text
+        return clean_response(
+            response.text
+        )
 
-    except Exception as e:
+    except Exception:
 
         return (
             "NexaDesk AI is currently unavailable. "
-            f"Technical details: {str(e)}"
+            "Please try again later."
         )
-    
+
 
 def ask_gemini_with_context(
     user_message: str,
     context: str
 ):
 
-    prompt = f"""
-    You are NexaDesk AI.
+    try:
 
-    Banking Knowledge:
+        prompt = f"""
+Knowledge:
 
-    {context}
+{context}
 
-    Customer Question:
+Customer Question:
 
-    {user_message}
+{user_message}
 
-    Answer using the banking knowledge above.
-    """
+Answer using only the provided knowledge.
+Keep the response short and professional.
+"""
 
-    response = model.generate_content(
-        prompt
+        response = model.generate_content(
+            prompt
+        )
+
+        return clean_response(
+            response.text
+        )
+
+    except Exception:
+
+        return (
+        "Please provide more details so I can assist you."
     )
 
-    return response.text
 
 def ask_gemini_with_history(
     message: str,

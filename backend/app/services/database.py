@@ -1,5 +1,5 @@
 import sqlite3
-
+from difflib import SequenceMatcher
 conn = sqlite3.connect("nexadesk.db", check_same_thread=False)
 
 cursor = conn.cursor()
@@ -74,22 +74,35 @@ def add_faq(question: str, answer: str):
     conn.commit()
 
 
-def search_faq(keyword: str):
+def search_faq(message: str):
 
     cursor.execute(
         """
-        SELECT answer
+        SELECT question, answer
         FROM faq
-        WHERE question LIKE ?
-        LIMIT 1
-        """,
-        (f"%{keyword}%",),
+        """
     )
 
-    result = cursor.fetchone()
+    faqs = cursor.fetchall()
 
-    if result:
-        return result[0]
+    best_score = 0
+    best_answer = None
+
+    for question, answer in faqs:
+
+        score = SequenceMatcher(
+            None,
+            message.lower(),
+            question.lower()
+        ).ratio()
+
+        if score > best_score:
+
+            best_score = score
+            best_answer = answer
+
+    if best_score >= 0.55:
+        return best_answer
 
     return None
 

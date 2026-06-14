@@ -1,7 +1,17 @@
 Savings Accounts
 
-Savings accounts allow secure deposits.
+Savings accounts allow customers to securely deposit and manage funds.
 
-Interest may be earned on balances.
+Features:
+- Secure deposits
+- Account management
+- Online banking access
+- Mobile banking access
+- ATM access
 
-Minimum balance requirements may apply.
+Requirements:
+- Valid identification
+- Phone number
+- Proof of address
+
+Customers should contact support for account-specific details.

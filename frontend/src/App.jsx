@@ -15,7 +15,8 @@ import { useState } from "react";
 import DashboardPage from "./pages/DashboardPage";
 import TicketsPage from "./pages/TicketsPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
-
+import LoginPage
+  from "./pages/LoginPage";
 
 function App() {
 
@@ -27,8 +28,24 @@ function App() {
 
   const [theme, setTheme] =
     useState("blue");
+  const [user, setUser] =
+    useState(
 
+      JSON.parse(
+        localStorage.getItem(
+          "google_user"
+        )
+      )
 
+    );
+  if (!user) {
+
+    return (
+      <LoginPage
+        setUser={setUser}
+      />
+    );
+  }
   // Page Router
 
   const renderPage = () => {

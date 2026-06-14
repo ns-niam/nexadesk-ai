@@ -277,7 +277,9 @@ def chat(request: ChatRequest):
 
     # faq retrieval
 
-    faq_answer = search_faq(message)
+    faq_answer = search_faq(
+        message.lower().strip()
+     )
 
     if faq_answer:
 

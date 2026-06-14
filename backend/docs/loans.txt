@@ -1,7 +1,18 @@
-Personal Loan
+Financing Services
 
-Customers can apply for personal loans.
+NexaDesk provides financing solutions for eligible customers.
 
-Loan approval depends on eligibility.
+Available Services:
+- Personal Financing
+- Home Financing
+- Education Financing
+- Business Financing
 
-Maximum loan amount is $50,000.
+Islamic Banking Services:
+- Murabaha
+- Mudarabah
+- Ijara
+
+Customers may contact support for product availability, requirements and eligibility information.
+
+Specific financing terms depend on the selected product and verification process.
