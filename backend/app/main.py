@@ -566,14 +566,24 @@ def chat(request: ChatRequest):
 
     else:
 
-      context = get_rag_context(
+        context = get_rag_context(
         message
-    )
+        )
 
-      response = ask_gemini_with_context(
-        message,
-        context
-    )
+        if context and len(
+        context.strip()
+        ) > 50:
+
+             response = ask_gemini_with_context(
+             message,
+             context
+            )
+
+        else:
+
+            response = ask_gemini(
+            message
+        )
     # save assistant response
 
     save_message(

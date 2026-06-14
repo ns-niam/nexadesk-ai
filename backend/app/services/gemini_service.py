@@ -2,7 +2,7 @@ import google.generativeai as genai
 
 from app.services.memory import chat_history
 from app.services.config import GEMINI_API_KEY
-
+from app.services.groq_service import ask_groq
 
 genai.configure(
     api_key=GEMINI_API_KEY
@@ -91,9 +91,8 @@ Current Customer Message:
 
     except Exception:
 
-        return (
-            "NexaDesk AI is currently unavailable. "
-            "Please try again later."
+        return ask_groq(
+             user_message
         )
 
 
