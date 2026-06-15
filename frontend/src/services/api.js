@@ -101,3 +101,75 @@ export const getFeedbacks = async () => {
 
   return response.json();
 };
+
+
+// Ticket In Progress
+
+export const markTicketInProgress =
+async (ticketId) => {
+
+  const response =
+    await fetch(
+      `${BASE_URL}/ticket-progress?ticket_id=${ticketId}`,
+      {
+        method: "PUT",
+        headers,
+      }
+    );
+
+  return response.json();
+};
+
+// Close Ticket
+
+export const closeTicket =
+async (ticketId) => {
+
+  const response =
+    await fetch(
+      `${BASE_URL}/ticket-close?ticket_id=${ticketId}`,
+      {
+        method: "PUT",
+        headers,
+      }
+    );
+
+  return response.json();
+};
+
+
+export const submitFeedback =
+async (
+  ticketId,
+  rating,
+  comment
+) => {
+
+  const response =
+    await fetch(
+      `${BASE_URL}/feedback?ticket_id=${ticketId}&rating=${rating}&comment=${encodeURIComponent(comment)}`,
+      {
+        method: "POST",
+        headers,
+      }
+    );
+
+  return response.json();
+};
+
+
+// Ticket Status
+
+export const getTicketStatus =
+async (ticketId) => {
+
+  const response =
+    await fetch(
+      `${BASE_URL}/ticket-status?ticket_id=${ticketId}`,
+      {
+        headers,
+      }
+    );
+
+  return response.json();
+};

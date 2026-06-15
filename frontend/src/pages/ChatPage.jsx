@@ -89,13 +89,23 @@ function ChatPage() {
             currentMessage
           );
 
+
+        const aiResponse =
+          data.response;
+
+        const isTicketCreated =
+          aiResponse?.includes(
+            "Ticket ID:"
+          );
+
         setMessages(
           (prev) => [
             ...prev,
             {
               sender: "ai",
-              text:
-                data.response,
+              text: aiResponse,
+              ticket:
+                isTicketCreated,
             },
           ]
         );
@@ -178,7 +188,7 @@ function ChatPage() {
       <div
         className="header"
       >
-         NexaDesk AI
+        NexaDesk AI
       </div>
 
       <div
@@ -188,25 +198,25 @@ function ChatPage() {
         {messages.length ===
           0 && (
 
-          <div
-            className="welcome"
-          >
-            <h2>
-              Welcome to
-              NexaDesk AI
-            </h2>
+            <div
+              className="welcome"
+            >
+              <h2>
+                Welcome to
+                NexaDesk AI
+              </h2>
 
-            <p>
-              Ask about
-              accounts,
-              cards,
-              tickets,
-              transfers and
-              customer
-              support.
-            </p>
-          </div>
-        )}
+              <p>
+                Ask about
+                accounts,
+                cards,
+                tickets,
+                transfers and
+                customer
+                support.
+              </p>
+            </div>
+          )}
 
         {messages.map(
           (
@@ -218,20 +228,44 @@ function ChatPage() {
               key={index}
               className={
                 msg.sender ===
-                "user"
+                  "user"
                   ? "message-row user"
                   : "message-row ai"
               }
             >
               <div
                 className={
-                  msg.sender ===
-                  "user"
+                  msg.sender === "user"
                     ? "message user-bubble"
                     : "message ai-bubble"
                 }
               >
-                {msg.text}
+
+                {msg.ticket ? (
+
+                  <div>
+
+                    <h3
+                      style={{
+                        color: "#22c55e",
+                        marginBottom: "10px",
+                      }}
+                    >
+                       Support Ticket Created
+                    </h3>
+
+                    <div>
+                      {msg.text}
+                    </div>
+
+                  </div>
+
+                ) : (
+
+                  msg.text
+
+                )}
+
               </div>
             </div>
           )
@@ -241,7 +275,7 @@ function ChatPage() {
           <div
             className="typing"
           >
-             NexaDesk AI
+            NexaDesk AI
             is thinking...
           </div>
         )}

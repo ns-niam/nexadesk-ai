@@ -1,49 +1,81 @@
 function Sidebar({
-  activePage,
-  setActivePage
+activePage,
+setActivePage
 }) {
 
 const menuItems = [
-  "Chat",
-  "History",
-  "Dashboard",
-  "Tickets",
-  "Analytics",
-  "Audit Logs",
-  "Settings"
+"Chat",
+"History",
+"Dashboard",
+"Tickets",
+"Analytics",
+"Audit Logs",
+"Settings"
 ];
 
-  return (
-    <div className="sidebar">
+const handleLogout = () => {
 
-      <h2>NexaDesk</h2>
+localStorage.clear();
 
-      <button
-        className="new-chat-btn"
-      >
-        + New Chat
-      </button>
+window.location.reload();
 
-      {menuItems.map((item) => (
+};
 
-        <div
-          key={item}
-          className={
-            activePage === item
-              ? "sidebar-item active"
-              : "sidebar-item"
-          }
-          onClick={() =>
-            setActivePage(item)
-          }
-        >
-          {item}
-        </div>
+return (
 
-      ))}
+<div className="sidebar">
 
+  <h2>
+    NexaDesk
+  </h2>
+
+  <button
+    className="new-chat-btn"
+  >
+    + New Chat
+  </button>
+
+  {menuItems.map((item) => (
+
+    <div
+      key={item}
+      className={
+        activePage === item
+          ? "sidebar-item active"
+          : "sidebar-item"
+      }
+      onClick={() =>
+        setActivePage(item)
+      }
+    >
+      {item}
     </div>
-  );
+
+  ))}
+
+  <div
+    style={{
+      marginTop: "auto",
+      paddingTop: "20px",
+    }}
+  >
+
+    <div
+      className="sidebar-item"
+      onClick={handleLogout}
+      style={{
+        color: "#ef4444",
+        fontWeight: "600",
+      }}
+    >
+       Logout
+    </div>
+
+  </div>
+
+</div>
+
+);
 }
 
 export default Sidebar;
