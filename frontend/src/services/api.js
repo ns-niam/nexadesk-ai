@@ -2,9 +2,8 @@
 
 const API_KEY = "nexadesk-secret-key";
 
-const BASE_URL =
-"https://crispy-rotary-phone-q749q77g55jv29vrg-8000.app.github.dev";
-
+const API_URL =
+"https://nexadesk-ai-production.up.railway.app";
 //Headers
 
 const headers = {
