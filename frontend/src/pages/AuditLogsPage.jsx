@@ -19,7 +19,7 @@ function AuditLogsPage() {
 
         const response =
           await fetch(
-            "https://crispy-rotary-phone-q749q77g55jv29vrg-8000.app.github.dev/audit-logs",
+            "https://nexadesk-ai-production.up.railway.app",
             {
               headers: {
                 "X-API-KEY":

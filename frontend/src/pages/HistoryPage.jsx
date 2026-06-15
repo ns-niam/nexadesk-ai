@@ -16,7 +16,7 @@ function HistoryPage() {
 
         const response =
           await fetch(
-            "https://crispy-rotary-phone-q749q77g55jv29vrg-8000.app.github.dev/session-history?session_id=frontend-user",
+            "https://nexadesk-ai-production.up.railway.app/session-history?session_id=frontend-user",
             {
               headers: {
                 "X-API-KEY":
