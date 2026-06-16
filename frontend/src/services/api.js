@@ -106,70 +106,159 @@ export const getFeedbacks = async () => {
 // Ticket In Progress
 
 export const markTicketInProgress =
-async (ticketId) => {
+  async (ticketId) => {
 
-  const response =
-    await fetch(
-      `${BASE_URL}/ticket-progress?ticket_id=${ticketId}`,
-      {
-        method: "PUT",
-        headers,
-      }
-    );
+    const response =
+      await fetch(
+        `${BASE_URL}/ticket-progress?ticket_id=${ticketId}`,
+        {
+          method: "PUT",
+          headers,
+        }
+      );
 
-  return response.json();
-};
+    return response.json();
+  };
 
 // Close Ticket
 
 export const closeTicket =
-async (ticketId) => {
+  async (ticketId) => {
 
-  const response =
-    await fetch(
-      `${BASE_URL}/ticket-close?ticket_id=${ticketId}`,
-      {
-        method: "PUT",
-        headers,
-      }
-    );
+    const response =
+      await fetch(
+        `${BASE_URL}/ticket-close?ticket_id=${ticketId}`,
+        {
+          method: "PUT",
+          headers,
+        }
+      );
 
-  return response.json();
-};
+    return response.json();
+  };
 
 
 export const submitFeedback =
-async (
-  ticketId,
-  rating,
-  comment
-) => {
+  async (
+    ticketId,
+    rating,
+    comment
+  ) => {
 
-  const response =
-    await fetch(
-      `${BASE_URL}/feedback?ticket_id=${ticketId}&rating=${rating}&comment=${encodeURIComponent(comment)}`,
-      {
-        method: "POST",
-        headers,
-      }
-    );
+    const response =
+      await fetch(
+        `${BASE_URL}/feedback?ticket_id=${ticketId}&rating=${rating}&comment=${encodeURIComponent(comment)}`,
+        {
+          method: "POST",
+          headers,
+        }
+      );
 
-  return response.json();
-};
+    return response.json();
+  };
 
 
 // Ticket Status
 
 export const getTicketStatus =
-async (ticketId) => {
+  async (ticketId) => {
 
-  const response =
-    await fetch(
-      `${BASE_URL}/ticket-status?ticket_id=${ticketId}`,
-      {
-        headers,
-      }
-    );
+    const response =
+      await fetch(
+        `${BASE_URL}/ticket-status?ticket_id=${ticketId}`,
+        {
+          headers,
+        }
+      );
 
-  return response.json();
-};
+    return response.json();
+  };
+
+
+// Health Check
+
+export const getHealth =
+  async () => {
+
+    const response =
+      await fetch(
+        `${BASE_URL}/health`,
+        {
+          headers,
+        }
+      );
+
+    return response.json();
+  };
+
+
+
+// Feedback Stats
+
+export const getFeedbackStats =
+  async () => {
+
+    const response =
+      await fetch(
+        `${BASE_URL}/feedback-stats`,
+        {
+          headers,
+        }
+      );
+
+    return response.json();
+  };
+
+
+// Search Customer
+
+export const searchCustomer =
+  async (name) => {
+
+    const response =
+      await fetch(
+        `${BASE_URL}/admin/search-customer?name=${encodeURIComponent(name)}`,
+        {
+          headers,
+        }
+      );
+
+    return response.json();
+  };
+
+
+// Top Intents
+
+export const getTopIntents =
+  async () => {
+
+    const response =
+      await fetch(
+        `${BASE_URL}/admin/top-intents`,
+        {
+          headers,
+        }
+      );
+
+    return response.json();
+  };
+
+
+export const registerUser =
+  async (
+    name,
+    email,
+    role
+  ) => {
+
+    const response =
+      await fetch(
+        `${BASE_URL}/register-user?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&role=${role}`,
+        {
+          method: "POST",
+          headers
+        }
+      );
+
+    return response.json();
+  };

@@ -89,6 +89,8 @@ from app.services.database import (
 
 from fastapi.middleware.cors import CORSMiddleware
 
+users = []
+
 app = FastAPI(
     title="NexaDesk AI",
     version="1.0.0"
@@ -259,13 +261,21 @@ def chat(request: ChatRequest):
 
     # save customer
 
-    if customer_profile["name"]:
+    if customer_profile.get("name"):
 
         save_customer(
-            customer_profile["name"],
-            customer_profile["loan_interest"],
-            customer_profile["credit_card_interest"]
+            customer_profile.get(
+                "name"
+            ),
+            customer_profile.get(
+               "loan_interest",
+                False
+            ),
+            customer_profile.get(
+               "credit_card_interest",
+                False
         )
+    )
 
     # save user message
 
@@ -829,16 +839,8 @@ def auth_status():
         "authenticated": is_authenticated()
     }
 
-@app.get("/ticket-status")
-def ticket_status(
-    ticket_id: str
-):
 
-    return {
-        "ticket": get_ticket_status(
-            ticket_id
-        )
-    }
+
 
 @app.get("/ticket-status")
 def ticket_status(
@@ -851,19 +853,7 @@ def ticket_status(
         )
     }
 
-@app.put("/ticket-close")
-def ticket_close(
-    ticket_id: str
-):
 
-    update_ticket_status(
-        ticket_id,
-        "CLOSED"
-    )
-
-    return {
-        "status": "closed"
-    }
 
 @app.get("/session-history")
 def session_history(
@@ -901,11 +891,6 @@ def closed_tickets(
         "tickets": get_closed_tickets()
     }
 
-
-@app.get("/dashboard")
-def dashboard():
-
-    return get_dashboard_stats()
 
 
 @app.put("/ticket-progress")
@@ -970,24 +955,7 @@ def customer_activity(
     }
 
 
-@app.put("/ticket-close")
-def ticket_close(
-    ticket_id: str
-):
 
-    update_ticket_status(
-        ticket_id,
-        "CLOSED"
-    )
-
-    save_audit_log(
-        "ticket_closed",
-        ticket_id
-    )
-
-    return {
-        "status": "closed"
-    }
 
 @app.get("/audit-logs")
 def audit_logs(
@@ -1044,3 +1012,38 @@ def dashboard(
     _: str = Depends(verify_api_key)
 ):
     return get_dashboard_stats()
+
+@app.post("/register-user")
+def register_user(
+    name: str,
+    email: str,
+    role: str
+):
+
+    for user in users:
+
+        if user["email"] == email:
+
+            return {
+                "message":
+                "User already exists"
+            }
+
+    users.append({
+        "name": name,
+        "email": email,
+        "role": role
+    })
+
+    return {
+        "message":
+        "User registered"
+    }
+
+
+@app.get("/users")
+def get_users():
+
+    return {
+        "users": users
+    }

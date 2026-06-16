@@ -20,6 +20,7 @@ def load_default_faqs():
 ("how are you", "I'm ready to assist you with your banking and support needs."),
 ("tell me about you", "I am NexaDesk AI, a virtual banking assistant designed to help customers with banking services and support requests."),
 ("who created you", "I am part of the NexaDesk platform and designed By (NS NIAM) to assist customers with banking services."),
+("who developed or built or build or created you", "I am part of the NexaDesk platform and designed By (NS NIAM) to assist customers with banking services."),
 ("what is your purpose", "My purpose is to help customers with banking information, support requests and service guidance."),
 ("no", "No problem. Please let me know if there is anything else I can assist you with."),
 ("okay", "Alright. Please let me know if you need any assistance."),
@@ -28,6 +29,7 @@ def load_default_faqs():
 ("help", "I can assist with accounts, cards, digital banking and customer support."),
 ("ai", "I am NexaDesk AI, your virtual banking support assistant."),
 ("who created you", "I am NexaDesk AI, developed By (NS-NIAM) to assist customers with banking and support requests."),
+("who developed you", "I am NexaDesk AI, developed By (NS-NIAM) to assist customers with banking and support requests."),
 # Identity
 
 ("who are you", "I am NexaDesk AI, your virtual banking support assistant."),
@@ -83,6 +85,8 @@ def load_default_faqs():
 # Islamic Banking
 
 ("islamic banking", "Islamic banking services are available based on Sharia-compliant principles."),
+("Loan", "Islamic banking services are available based on Sharia-compliant principles."),
+("Loan interest", "Islamic banking services are available based on Sharia-compliant principles."),
 ("mudarabah", "Mudarabah is a profit-sharing arrangement between the customer and the institution."),
 ("murabaha", "Murabaha is a Sharia-compliant financing arrangement based on cost-plus pricing."),
 ("ijara", "Ijara is a leasing-based financing solution available for eligible customers."),

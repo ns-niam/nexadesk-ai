@@ -1,81 +1,126 @@
 function Sidebar({
-activePage,
-setActivePage
+  activePage,
+  setActivePage
 }) {
 
-const menuItems = [
-"Chat",
-"History",
-"Dashboard",
-"Tickets",
-"Analytics",
-"Audit Logs",
-"Settings"
-];
+  const role =
+    localStorage.getItem(
+      "role"
+    ) || "customer";
 
-const handleLogout = () => {
+  const menuItems =
+    role === "admin"
+      ? [
+        "Dashboard",
+        "Tickets",
+        "Analytics",
+        "Audit Logs",
+        "Settings"
+      ]
+      : [
+        "Chat",
+        "History",
+        "Settings"
+      ];
 
-localStorage.clear();
+  const handleLogout = () => {
 
-window.location.reload();
+    localStorage.clear();
 
-};
+    window.location.reload();
 
-return (
+  };
 
-<div className="sidebar">
+  return (
 
-  <h2>
-    NexaDesk
-  </h2>
+    <div className="sidebar">
 
-  <button
-    className="new-chat-btn"
-  >
-    + New Chat
-  </button>
+      <h2>
+        NexaDesk
+      </h2>
 
-  {menuItems.map((item) => (
+      <p
+        style={{
+          color: "#64748b",
+          fontSize: "12px",
+          marginTop: "-5px"
+        }}
+      >
+        {localStorage.getItem(
+          "user_name"
+        )}
+      </p>
 
-    <div
-      key={item}
-      className={
-        activePage === item
-          ? "sidebar-item active"
-          : "sidebar-item"
-      }
-      onClick={() =>
-        setActivePage(item)
-      }
-    >
-      {item}
+      <p
+        style={{
+          color: "#94a3b8",
+          fontSize: "13px",
+          marginTop: "-5px",
+          marginBottom: "20px",
+        }}
+      >
+        {role === "admin"
+          ? "Admin Portal"
+          : "Customer Portal"}
+      </p>
+
+      <button
+        className="new-chat-btn"
+        onClick={() => {
+
+          localStorage.removeItem(
+            "nexadesk_messages"
+          );
+
+          setActivePage("Chat");
+
+          window.location.reload();
+        }}
+      >
+        + New Chat
+      </button>
+
+      {menuItems.map((item) => (
+
+        <div
+          key={item}
+          className={
+            activePage === item
+              ? "sidebar-item active"
+              : "sidebar-item"
+          }
+          onClick={() =>
+            setActivePage(item)
+          }
+        >
+          {item}
+        </div>
+
+      ))}
+
+      <div
+        style={{
+          marginTop: "auto",
+          paddingTop: "20px",
+        }}
+      >
+
+        <div
+          className="sidebar-item"
+          onClick={handleLogout}
+          style={{
+            color: "#ef4444",
+            fontWeight: "600",
+          }}
+        >
+          Logout
+        </div>
+
+      </div>
+
     </div>
 
-  ))}
-
-  <div
-    style={{
-      marginTop: "auto",
-      paddingTop: "20px",
-    }}
-  >
-
-    <div
-      className="sidebar-item"
-      onClick={handleLogout}
-      style={{
-        color: "#ef4444",
-        fontWeight: "600",
-      }}
-    >
-       Logout
-    </div>
-
-  </div>
-
-</div>
-
-);
+  );
 }
 
 export default Sidebar;

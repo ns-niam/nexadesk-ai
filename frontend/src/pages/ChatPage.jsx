@@ -14,31 +14,15 @@ function ChatPage() {
   const [loading, setLoading] =
     useState(false);
 
-  // Session
-
   const [sessionId] =
-    useState(() => {
+  useState(() => {
 
-      const saved =
-        localStorage.getItem(
-          "nexadesk_session"
-        );
-
-      if (saved) {
-        return saved;
-      }
-
-      const newId =
-        crypto.randomUUID();
-
-      localStorage.setItem(
-        "nexadesk_session",
-        newId
-      );
-
-      return newId;
-    });
-
+    return (
+      localStorage.getItem(
+        "user_email"
+      ) || "guest"
+    );
+  });
   // Refs
 
   const messagesEndRef =

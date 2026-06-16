@@ -1,22 +1,16 @@
 def classify_intent(message: str):
     print("MESSAGE =", message)
-   
+
     message = message.lower()
 
-    if (
-        "lost" in message and "card" in message
-    ) or (
+    if ("lost" in message and "card" in message) or (
         "stolen" in message and "card" in message
     ):
         return "card_security"
 
- 
-
-
-
     if any(keyword in message for keyword in human_keywords):
         return "human_handoff"
-    
+
     elif any(keyword in message for keyword in card_activation_keywords):
         return "card_activation"
 
@@ -29,11 +23,9 @@ def classify_intent(message: str):
     elif any(keyword in message for keyword in card_status_keywords):
         return "card_status"
 
-    elif (
-    "lost" in message and "card" in message
-     ) or (
-      "stolen" in message and "card" in message
-     ):
+    elif ("lost" in message and "card" in message) or (
+        "stolen" in message and "card" in message
+    ):
         return "card_security"
 
     elif any(keyword in message for keyword in card_block_keywords):
@@ -76,19 +68,15 @@ def classify_intent(message: str):
 
     elif any(keyword in message for keyword in kyc_keywords):
         return "kyc_update"
-    
-    elif any(keyword in message for keyword in complaint_keywords):
-         return "complaint"
+
 
     elif any(keyword in message for keyword in loan_keywords):
-         return "loan_inquiry"
+        return "loan_inquiry"
 
-    elif any(keyword in message for keyword in credit_card_keywords):
-         return "credit_card_support"
 
     else:
         return "general_query"
-    
+
 
 from app.services.customer_profile import customer_profile
 
@@ -105,7 +93,7 @@ def extract_customer_data(message: str):
 
             start = message_lower.find("my name is")
 
-            name_text = message[start + len("my name is"):].strip()
+            name_text = message[start + len("my name is") :].strip()
 
             name = name_text.split()[0]
 
@@ -114,90 +102,88 @@ def extract_customer_data(message: str):
         except Exception:
             pass
 
-
     # credit card interest
 
     if "credit card" in message_lower:
 
         customer_profile["credit_card_interest"] = True
-# customer id extraction
+
+    # loan interest
+
+    if "loan" in message_lower:
+
+        customer_profile["loan_interest"] = True
+    # customer id extraction
 
     if "customer id" in message_lower:
 
         try:
 
-             customer_profile["customer_id"] = (
-             message.split(":")[-1].strip()
-        )
+            customer_profile["customer_id"] = message.split(":")[-1].strip()
 
         except Exception:
             pass
 
 
 account_keywords = [
-        "account",
-        "open account",
-        "new account",
-        "create account",
-        "savings",
-        "saving account",
-        "current account",
-        "checking account"
-    ]
+    "account",
+    "open account",
+    "new account",
+    "create account",
+    "savings",
+    "saving account",
+    "current account",
+    "checking account",
+]
 loan_keywords = [
-        "loan",
-        "personal loan",
-        "home loan",
-        "mortgage",
-        "education loan",
-        "student loan",
-        "business loan",
-        "car loan",
-        "borrow money"
-    ]
+    "loan",
+    "personal loan",
+    "home loan",
+    "mortgage",
+    "education loan",
+    "student loan",
+    "business loan",
+    "car loan",
+    "borrow money",
+]
 
 credit_card_keywords = [
-        "credit card",
-        "visa",
-        "mastercard",
-        "credit limit",
-        "card application",
-        "apply card"
-    ]
+    "credit card",
+    "visa",
+    "mastercard",
+    "credit limit",
+    "card application",
+    "apply card",
+]
 
 debit_card_keywords = [
-        "debit card",
-        "atm card",
-        "replace card",
-        "new debit card",
-        "lost card"
-    ]
+    "debit card",
+    "atm card",
+    "replace card",
+    "new debit card",
+    "lost card",
+]
 
 transfer_keywords = [
-        "transfer",
-        "send money",
-        "wire transfer",
-        "bank transfer",
-        "international transfer",
-        "payment"
-    ]
+    "transfer",
+    "send money",
+    "wire transfer",
+    "bank transfer",
+    "international transfer",
+    "payment",
+]
 
-balance_keywords = [
-        "balance",
-        "account balance",
-        "check balance",
-        "available balance"
-    ]
+balance_keywords = ["balance", "account balance", "check balance", "available balance"]
 
 human_keywords = [
-        "human",
-        "agent",
-        "representative",
-        "customer service",
-        "support agent",
-        "real person",
-        "talk to someone"
-    ]
+    "human",
+    "agent",
+    "representative",
+    "customer service",
+    "support agent",
+    "real person",
+    "talk to someone",
+]
 
 card_block_keywords = [
     "block card",
@@ -209,71 +195,64 @@ card_block_keywords = [
     "card stolen",
     "card lost",
     "lost debit card",
-    "lost credit card"
-    ]
+    "lost credit card",
+]
 
-branch_keywords = [
-        "branch",
-        "location",
-        "office",
-        "nearest branch",
-        "bank branch"
-    ]
+branch_keywords = ["branch", "location", "office", "nearest branch", "bank branch"]
 
 online_banking_keywords = [
-        "online banking",
-        "internet banking",
-        "mobile banking",
-        "bank app",
-        "login issue",
-        "forgot password"
-    ]
+    "online banking",
+    "internet banking",
+    "mobile banking",
+    "bank app",
+    "login issue",
+    "forgot password",
+]
 card_activation_keywords = [
-       "activate card",
-       "card activation",
-       "activate my card",
-       "new card activation"
+    "activate card",
+    "card activation",
+    "activate my card",
+    "new card activation",
 ]
 pin_reset_keywords = [
-       "pin",
-       "forgot pin",
-       "forgot my pin",
-       "reset pin",
-       "pin reset",
-       "change pin",
-       "new pin",
-       "atm pin",
-       "card pin",
-       "pin problem",
-       "pin issue"
+    "pin",
+    "forgot pin",
+    "forgot my pin",
+    "reset pin",
+    "pin reset",
+    "change pin",
+    "new pin",
+    "atm pin",
+    "card pin",
+    "pin problem",
+    "pin issue",
 ]
 
 card_replacement_keywords = [
-       "replace card",
-       "replacement card",
-       "new card",
-       "damaged card",
-       "expired card"
+    "replace card",
+    "replacement card",
+    "new card",
+    "damaged card",
+    "expired card",
 ]
 
 card_status_keywords = [
-       "card status",
-       "is my card active",
-       "card active",
-       "card information"
-]        
+    "card status",
+    "is my card active",
+    "card active",
+    "card information",
+]
 
 
 service_request_keywords = [
-     "cheque book",
-     "check book",
-     "bank statement",
-     "account statement",
-     "statement request",
-     "account certificate",
-     "certificate request"
+    "cheque book",
+    "check book",
+    "bank statement",
+    "account statement",
+    "statement request",
+    "account certificate",
+    "certificate request",
 ]
-
 
 
 phone_keywords = [
@@ -285,30 +264,14 @@ phone_keywords = [
     "change phone",
     "change my phone",
     "change phone number",
-    "new phone number"
+    "new phone number",
 ]
 
-email_keywords = [
-    "email",
-    "update email",
-    "change email",
-    "new email",
-    "email address"
-]
+email_keywords = ["email", "update email", "change email", "new email", "email address"]
 
-address_keywords = [
-    "address",
-    "update address",
-    "change address",
-    "new address"
-]
+address_keywords = ["address", "update address", "change address", "new address"]
 
-kyc_keywords = [
-    "kyc",
-    "kyc update",
-    "update kyc",
-    "kyc verification"
-]
+kyc_keywords = ["kyc", "kyc update", "update kyc", "kyc verification"]
 
 complaint_keywords = [
     "complaint",
@@ -322,5 +285,5 @@ complaint_keywords = [
     "unauthorized transaction",
     "wrong transaction",
     "money not received",
-    "transaction failed"
+    "transaction failed",
 ]

@@ -1,158 +1,162 @@
 import {
-useEffect,
-useState
+  useEffect,
+  useState
 } from "react";
 
 function HistoryPage() {
 
-const [
-history,
-setHistory
-] = useState([]);
+  const [
+    history,
+    setHistory
+  ] = useState([]);
 
-useEffect(() => {
+  useEffect(() => {
 
-const loadHistory =
-  async () => {
+    const loadHistory =
+      async () => {
 
-  try {
+        try {
 
-    const response =
-      await fetch(
-        "https://nexadesk-ai-production.up.railway.app/session-history?session_id=frontend-user",
-        {
-          headers: {
-            "X-API-KEY":
-              "nexadesk-secret-key"
-          }
+          const sessionId =
+            localStorage.getItem(
+              "user_email"
+            );
+
+          const response =
+            await fetch(
+              `https://nexadesk-ai-production.up.railway.app/session-history?session_id=${sessionId}`,
+              {
+                headers: {
+                  "X-API-KEY":
+                    "nexadesk-secret-key"
+                }
+              }
+            );
+          const data =
+            await response.json();
+
+          setHistory(
+            data.history || []
+          );
+
+        } catch (
+        error
+        ) {
+
+          console.log(
+            error
+          );
         }
-      );
+      };
 
-    const data =
-      await response.json();
+    loadHistory();
 
-    setHistory(
-      data.history || []
-    );
+  }, []);
 
-  } catch (
-    error
-  ) {
+  return (
 
-    console.log(
-      error
-    );
-  }
-};
+    <div
+      style={{
+        padding: "30px",
+        color: "white",
+        overflowY: "auto",
+        height: "100vh",
+      }}
+    >
 
-loadHistory();
+      <h1>
+        Chat History
+      </h1>
 
-}, []);
+      <p
+        style={{
+          color: "#9ca3af",
+          marginBottom: "30px",
+        }}
+      >
+        View previous customer conversations and AI responses.
+      </p>
 
-return (
+      <div
+        style={{
+          background: "#1f2937",
+          padding: "20px",
+          borderRadius: "14px",
+          marginBottom: "30px",
+        }}
+      >
+        <h3>
+          Total Messages
+        </h3>
 
-<div
-  style={{
-    padding: "30px",
-    color: "white",
-    overflowY: "auto",
-    height: "100vh",
-  }}
->
+        <h1>
+          {history.length}
+        </h1>
+      </div>
 
-  <h1>
-    Chat History
-  </h1>
+      {history.length === 0 ? (
 
-  <p
-    style={{
-      color: "#9ca3af",
-      marginBottom: "30px",
-    }}
-  >
-    View previous customer conversations and AI responses.
-  </p>
+        <p>
+          No chat history found.
+        </p>
 
-  <div
-    style={{
-      background: "#1f2937",
-      padding: "20px",
-      borderRadius: "14px",
-      marginBottom: "30px",
-    }}
-  >
-    <h3>
-      Total Messages
-    </h3>
+      ) : (
 
-    <h1>
-      {history.length}
-    </h1>
-  </div>
+        history.map(
+          (
+            item,
+            index
+          ) => (
 
-  {history.length === 0 ? (
+            <div
+              key={index}
+              style={{
+                background:
+                  item[0] === "user"
+                    ? "#1f2937"
+                    : "#111827",
 
-    <p>
-      No chat history found.
-    </p>
+                padding:
+                  "18px",
 
-  ) : (
+                marginBottom:
+                  "15px",
 
-    history.map(
-      (
-        item,
-        index
-      ) => (
+                borderRadius:
+                  "14px",
 
-        <div
-          key={index}
-          style={{
-            background:
-              item[0] === "user"
-                ? "#1f2937"
-                : "#111827",
+                border:
+                  item[0] === "user"
+                    ? "1px solid #2563eb"
+                    : "1px solid #374151",
+              }}
+            >
 
-            padding:
-              "18px",
+              <h3>
+                {item[0] === "user"
+                  ? "👤 User"
+                  : "🤖 NexaDesk AI"}
+              </h3>
 
-            marginBottom:
-              "15px",
+              <p
+                style={{
+                  marginTop: "10px",
+                  lineHeight: "1.7",
+                }}
+              >
+                {item[1]}
+              </p>
 
-            borderRadius:
-              "14px",
+            </div>
 
-            border:
-              item[0] === "user"
-                ? "1px solid #2563eb"
-                : "1px solid #374151",
-          }}
-        >
+          )
+        )
 
-          <h3>
-            {item[0] === "user"
-              ? "👤 User"
-              : "🤖 NexaDesk AI"}
-          </h3>
+      )}
 
-          <p
-            style={{
-              marginTop: "10px",
-              lineHeight: "1.7",
-            }}
-          >
-            {item[1]}
-          </p>
+    </div>
 
-        </div>
-
-      )
-    )
-
-  )}
-
-</div>
-
-);
+  );
 }
 
 export default HistoryPage;

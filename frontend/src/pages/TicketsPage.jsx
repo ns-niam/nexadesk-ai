@@ -8,9 +8,9 @@ import {
   getClosedTickets,
   markTicketInProgress,
   closeTicket,
-  submitFeedback
-}
-  from "../services/api";
+  submitFeedback,
+  getTicketStatus
+} from "../services/api";
 
 function TicketsPage() {
 
@@ -33,6 +33,16 @@ function TicketsPage() {
     closedTickets,
     setClosedTickets
   ] = useState([]);
+
+  const [
+    ticketSearch,
+    setTicketSearch
+  ] = useState("");
+
+  const [
+    ticketResult,
+    setTicketResult
+  ] = useState(null);
 
   const loadTickets =
     async () => {
@@ -137,6 +147,35 @@ function TicketsPage() {
       }
     };
 
+
+  const handleTicketSearch =
+    async () => {
+
+      if (!ticketSearch) {
+        return;
+      }
+
+      try {
+
+        const data =
+          await getTicketStatus(
+            ticketSearch
+          );
+
+          console.log(data);
+
+        setTicketResult(
+          data.ticket
+        );
+
+      } catch (
+      error
+      ) {
+
+        console.log(error);
+      }
+    };
+
   return (
 
     <div
@@ -151,6 +190,85 @@ function TicketsPage() {
       <h1>
         Ticket Management
       </h1>
+
+      <div
+        style={{
+          background: "#1f2937",
+          padding: "20px",
+          borderRadius: "14px",
+          marginTop: "20px",
+          marginBottom: "25px",
+        }}
+      >
+
+        <h3>
+          Ticket Status Lookup
+        </h3>
+
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            marginTop: "10px",
+          }}
+        >
+
+          <input
+            value={ticketSearch}
+            onChange={(e) =>
+              setTicketSearch(
+                e.target.value
+              )
+            }
+            placeholder="Enter Ticket ID"
+            style={{
+              flex: 1,
+              padding: "10px",
+              borderRadius: "8px",
+              border: "none",
+            }}
+          />
+
+          <button
+            onClick={
+              handleTicketSearch
+            }
+            style={{
+              background: "#2563eb",
+              color: "white",
+              border: "none",
+              padding: "10px 18px",
+              borderRadius: "8px",
+              cursor: "pointer",
+            }}
+          >
+            Check
+          </button>
+
+        </div>
+
+        {ticketResult && (
+
+          <div
+            style={{
+              marginTop: "15px",
+            }}
+          >
+
+            <strong>
+              Status:
+            </strong>
+
+            {" "}
+            {ticketResult}
+
+          </div>
+
+        )}
+
+      </div>
+
+
 
       <br />
 
@@ -460,7 +578,7 @@ function TicketsPage() {
                   marginTop: "15px",
                 }}
               >
-                
+
               </div>
 
             </div>
