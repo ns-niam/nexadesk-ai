@@ -207,11 +207,11 @@ function LoginPage({ setUser }) {
             }}
           >
 
-            <GoogleLogin
+           <GoogleLogin
 
-              onSuccess={(
-                credentialResponse
-              ) => {
+  onSuccess={async (
+    credentialResponse
+  ) => {
 
                 const userInfo =
                   jwtDecode(
