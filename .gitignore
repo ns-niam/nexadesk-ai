@@ -1,20 +1,61 @@
-# Virtual Environment
-venv/
-backend/venv/
-
 # Environment Variables
 .env
+.env.*
 backend/.env
+frontend/.env
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
 
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
+*.so
 
-# VS Code
-.vscode/
+venv/
+.venv/
+ENV/
+env/
 
 # Logs
 *.log
+logs/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build Files
+dist/
+build/
+out/
+.vite/
+
+# IDE
+.vscode/
+.idea/
 
 # OS Files
 .DS_Store
+Thumbs.db
+
+# Cache
+.cache/
+.pytest_cache/
+.mypy_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Temporary Files
+*.tmp
+*.bak
+*.swp

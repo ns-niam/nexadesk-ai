@@ -1,5 +1,6 @@
 import sqlite3
 from difflib import SequenceMatcher
+
 conn = sqlite3.connect("nexadesk.db", check_same_thread=False)
 
 cursor = conn.cursor()
@@ -76,12 +77,10 @@ def add_faq(question: str, answer: str):
 
 def search_faq(message: str):
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT question, answer
         FROM faq
-        """
-    )
+        """)
 
     faqs = cursor.fetchall()
 
@@ -90,11 +89,7 @@ def search_faq(message: str):
 
     for question, answer in faqs:
 
-        score = SequenceMatcher(
-            None,
-            message.lower(),
-            question.lower()
-        ).ratio()
+        score = SequenceMatcher(None, message.lower(), question.lower()).ratio()
 
         if score > best_score:
 
@@ -126,6 +121,17 @@ CREATE TABLE IF NOT EXISTS tickets (
     session_id TEXT,
     issue_type TEXT,
     status TEXT
+)
+""")
+
+conn.commit()
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS feedback (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ticket_id TEXT,
+    rating INTEGER,
+    comment TEXT
 )
 """)
 
@@ -521,18 +527,13 @@ def get_feedback_stats():
 
     avg_rating = cursor.fetchone()[0]
 
-
-
-
     return {
-    "total_feedbacks": total_feedbacks,
-    "average_rating": round(avg_rating, 2) if avg_rating else 0,
-}
+        "total_feedbacks": total_feedbacks,
+        "average_rating": round(avg_rating, 2) if avg_rating else 0,
+    }
 
 
-def update_ticket_in_progress(
-    ticket_id: str
-):
+def update_ticket_in_progress(ticket_id: str):
 
     cursor.execute(
         """
@@ -540,7 +541,7 @@ def update_ticket_in_progress(
         SET status = 'IN_PROGRESS'
         WHERE ticket_id = ?
         """,
-        (ticket_id,)
+        (ticket_id,),
     )
 
     conn.commit()
@@ -548,15 +549,16 @@ def update_ticket_in_progress(
 
 def get_all_conversations():
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT
             session_id,
             role,
             message
         FROM chat_history
         ORDER BY id DESC
-        """
-    )
+        """)
 
     return cursor.fetchall()
+
+
+
