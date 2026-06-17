@@ -14,6 +14,7 @@ function Sidebar({
         "Dashboard",
         "Tickets",
         "Analytics",
+        "Conversations",
         "Audit Logs",
         "Settings"
       ]

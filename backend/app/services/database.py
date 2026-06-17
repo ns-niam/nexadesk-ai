@@ -544,3 +544,19 @@ def update_ticket_in_progress(
     )
 
     conn.commit()
+
+
+def get_all_conversations():
+
+    cursor.execute(
+        """
+        SELECT
+            session_id,
+            role,
+            message
+        FROM chat_history
+        ORDER BY id DESC
+        """
+    )
+
+    return cursor.fetchall()

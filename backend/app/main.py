@@ -23,6 +23,8 @@ from app.services.rag_service import (
     get_rag_context
 )
 
+
+
 from app.services.intent_classifier import (
     classify_intent,
     extract_customer_data
@@ -53,6 +55,7 @@ from app.services.database import (
     save_message,
     get_chat_history,
     search_faq,
+    get_all_conversations,
 
     save_ticket,
     save_intent,
@@ -633,6 +636,19 @@ def history():
 
     return {
         "history": chat_history
+    }
+
+
+@app.get("/admin/conversations")
+def admin_conversations(
+    _: str = Depends(
+        verify_api_key
+    )
+):
+
+    return {
+        "conversations":
+        get_all_conversations()
     }
 
 # analytics
