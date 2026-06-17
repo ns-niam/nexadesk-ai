@@ -17,6 +17,8 @@ import TicketsPage from "./pages/TicketsPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import LoginPage
   from "./pages/LoginPage";
+import ConversationsPage
+  from "./pages/ConversationsPage";
 
 function App() {
 
@@ -80,6 +82,10 @@ function App() {
       case "History":
         return (
           <HistoryPage />
+        );
+      case "Conversations":
+        return (
+          <ConversationsPage />
         );
 
       default:
